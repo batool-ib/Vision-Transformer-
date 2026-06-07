@@ -6,663 +6,129 @@
 <title>Vision Transformer (ViT) — Final Exam & Flashcards</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --paper: #f5f0e8;
-  --paper-dark: #ede7d3;
-  --paper-rule: #d4c9a8;
-  --margin-line: #e8a89c;
-  --ink: #1a1612;
-  --ink-light: #4a4035;
-  --ink-muted: #8a7d6a;
-  --red-pen: #c0392b;
-  --blue-pen: #1a3a6b;
-  --green-pen: #1a5c2a;
-  --stamp-correct: #1a5c2a;
-  --stamp-wrong: #c0392b;
-  --dark-bg: #0f0f14;
-  --dark-surface: #16161e;
-  --dark-card: #1c1c26;
-  --dark-border: #2a2a3a;
-  --dark-text: #e8e4f0;
-  --dark-muted: #8a86a0;
-  --accent: #7c6af7;
-  --accent-glow: rgba(124,106,247,0.15);
-  --nav-bg: #0a0a10;
-}
+:root{--paper:#f5f0e8;--paper-dark:#ede7d3;--paper-rule:#d4c9a8;--margin-line:#e8a89c;--ink:#1a1612;--ink-light:#4a4035;--ink-muted:#8a7d6a;--green-pen:#1a5c2a;--red-pen:#c0392b;--blue-pen:#1a3a6b;--dark-bg:#0f0f14;--dark-surface:#16161e;--dark-card:#1c1c26;--dark-border:#2a2a3a;--dark-text:#e8e4f0;--dark-muted:#8a86a0;--accent:#7c6af7;--nav-bg:#0a0a10;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Serif 4',Georgia,serif;background:var(--nav-bg);min-height:100vh;}
+.top-nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);border-bottom:1px solid #1e1e2e;display:flex;align-items:center;padding:0 2rem;height:52px;}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:11px;color:#3a3a5a;letter-spacing:.15em;text-transform:uppercase;margin-right:auto;}
+.nav-tab{height:52px;padding:0 1.5rem;border:none;background:transparent;color:#4a4a6a;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;letter-spacing:.04em;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.nav-tab:hover{color:#8a86a0;}
+.nav-tab.active{color:var(--dark-text);border-bottom-color:var(--accent);}
+.section{display:none;}
+.section.active{display:block;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* EXAM */
+#exam-section{background:var(--paper);min-height:calc(100vh - 52px);}
+.exam-header{background:var(--paper);border-bottom:2px solid var(--ink);padding:3rem 0 2rem;position:relative;overflow:hidden;}
+.exam-header::before{content:'';position:absolute;left:80px;top:0;bottom:0;width:1px;background:var(--margin-line);}
+.exam-header-inner{max-width:860px;margin:0 auto;padding:0 2rem 0 120px;}
+.exam-course-code{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:.5rem;}
+.exam-title{font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.4rem;}
+.exam-subtitle{font-size:14px;color:var(--ink-light);font-style:italic;margin-bottom:1.5rem;}
+.exam-meta{display:flex;gap:2rem;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-muted);}
+.exam-meta span{border-bottom:1px solid var(--paper-rule);padding-bottom:2px;}
+.stats-bar{background:var(--paper-dark);border-bottom:1px solid var(--paper-rule);padding:.75rem 0;position:sticky;top:52px;z-index:50;}
+.stats-inner{max-width:860px;margin:0 auto;padding:0 2rem 0 120px;display:flex;align-items:center;gap:2rem;}
+.stat-chip{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-muted);}
+.stat-chip strong{color:var(--ink);}
+.stat-chip.correct strong{color:var(--green-pen);}
+.stat-chip.wrong strong{color:var(--red-pen);}
+.exam-progress-bar{flex:1;height:4px;background:var(--paper-rule);border-radius:2px;overflow:hidden;}
+.exam-progress-fill{height:100%;background:var(--blue-pen);border-radius:2px;transition:width .4s ease;width:0%;}
+.exam-body{max-width:860px;margin:0 auto;padding:2rem 2rem 4rem 120px;position:relative;}
+.exam-body::before{content:'';position:absolute;left:80px;top:0;bottom:0;width:1px;background:var(--margin-line);}
+.ruled-section{background-image:repeating-linear-gradient(transparent,transparent 31px,var(--paper-rule) 31px,var(--paper-rule) 32px);background-attachment:local;}
+.section-heading{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);letter-spacing:.05em;text-transform:uppercase;border-bottom:2px double var(--ink);padding-bottom:.5rem;margin:2.5rem 0 1.5rem;display:flex;align-items:baseline;gap:1rem;}
+.section-heading .q-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-muted);font-weight:400;text-transform:none;}
+.q-card{margin-bottom:2rem;background:var(--paper);border-left:3px solid transparent;padding:1.25rem 1.25rem 1.25rem 1rem;transition:border-color .3s;}
+.q-card.answered-correct{border-left-color:var(--green-pen);}
+.q-card.answered-wrong{border-left-color:var(--red-pen);}
+.q-top{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;}
+.q-num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-muted);min-width:28px;padding-top:2px;}
+.q-text{font-size:15px;color:var(--ink);line-height:1.7;flex:1;}
+.q-text code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--paper-dark);padding:1px 5px;border-radius:3px;}
+.difficulty-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;padding:2px 7px;border-radius:2px;text-transform:uppercase;font-weight:500;flex-shrink:0;}
+.badge-easy{background:#e8f5e9;color:var(--green-pen);border:1px solid #a5d6a7;}
+.badge-medium{background:#fff8e1;color:#8a6000;border:1px solid #ffe082;}
+.badge-hard{background:#fce4ec;color:var(--red-pen);border:1px solid #f48fb1;}
+.options{margin-top:.75rem;display:flex;flex-direction:column;gap:.5rem;}
+.option-btn{display:flex;align-items:flex-start;gap:.75rem;padding:.6rem .85rem;border:1px solid var(--paper-rule);background:transparent;cursor:pointer;text-align:left;font-family:'Source Serif 4',serif;font-size:14px;color:var(--ink-light);border-radius:2px;transition:all .15s;line-height:1.5;}
+.option-btn:hover:not(:disabled){background:var(--paper-dark);border-color:var(--ink-muted);}
+.option-btn .opt-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-muted);min-width:20px;padding-top:1px;font-weight:500;}
+.option-btn.correct{background:#e8f5e9;border-color:var(--green-pen);color:var(--ink);}
+.option-btn.correct .opt-label{color:var(--green-pen);}
+.option-btn.wrong{background:#fce4ec;border-color:var(--red-pen);color:var(--ink);}
+.option-btn.wrong .opt-label{color:var(--red-pen);}
+.option-btn.dimmed{opacity:.45;}
+.option-btn:disabled{cursor:default;}
+.tf-row{display:flex;gap:.75rem;margin-top:.75rem;}
+.tf-btn{padding:.5rem 1.5rem;border:1px solid var(--paper-rule);background:transparent;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.05em;color:var(--ink-light);border-radius:2px;transition:all .15s;}
+.tf-btn:hover:not(:disabled){background:var(--paper-dark);border-color:var(--ink-muted);}
+.tf-btn.correct{background:#e8f5e9;border-color:var(--green-pen);color:var(--green-pen);}
+.tf-btn.wrong{background:#fce4ec;border-color:var(--red-pen);color:var(--red-pen);}
+.tf-btn.dimmed{opacity:.45;}
+.tf-btn:disabled{cursor:default;}
+.feedback{margin-top:.75rem;padding:.75rem 1rem;border-radius:2px;font-size:13.5px;line-height:1.65;color:var(--ink);display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:#f1f8e9;border-left:3px solid var(--green-pen);}
+.feedback.wrong-fb{background:#fff3f3;border-left:3px solid var(--red-pen);}
+.feedback-icon{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;display:block;margin-bottom:4px;}
+.feedback.correct-fb .feedback-icon{color:var(--green-pen);}
+.feedback.wrong-fb .feedback-icon{color:var(--red-pen);}
+.q-card.unanswered-highlight{background:#fff8e1;border-left-color:#f0a500;animation:pulse-warn .6s ease;}
+@keyframes pulse-warn{0%,100%{background:#fff8e1;}50%{background:#ffe082;}}
+.submit-area{margin-top:2.5rem;padding-top:2rem;border-top:2px double var(--ink);display:flex;flex-direction:column;align-items:center;gap:1rem;}
+.submit-btn{padding:.85rem 3rem;background:var(--blue-pen);color:white;border:none;font-family:'Playfair Display',serif;font-size:16px;letter-spacing:.06em;cursor:pointer;border-radius:2px;transition:all .2s;}
+.submit-btn:hover{background:#0f2550;}
+.score-banner{display:none;width:100%;padding:1.5rem 2rem;border:2px solid var(--ink);background:var(--paper-dark);text-align:center;}
+.score-banner.show{display:block;}
+.score-grade{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--ink);}
+.score-details{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-muted);margin-top:.5rem;}
+.score-msg{font-style:italic;font-size:15px;color:var(--ink-light);margin-top:.75rem;}
 
-body {
-  font-family: 'Source Serif 4', Georgia, serif;
-  background: var(--nav-bg);
-  min-height: 100vh;
-}
-
-/* ===== NAV ===== */
-.top-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--nav-bg);
-  border-bottom: 1px solid #1e1e2e;
-  display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 0 2rem;
-  height: 52px;
-}
-.nav-logo {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: #3a3a5a;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-right: auto;
-}
-.nav-tab {
-  height: 52px;
-  padding: 0 1.5rem;
-  border: none;
-  background: transparent;
-  color: #4a4a6a;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-}
-.nav-tab:hover { color: #8a86a0; }
-.nav-tab.active { color: var(--dark-text); border-bottom-color: var(--accent); }
-
-/* ===== SECTIONS ===== */
-.section { display: none; }
-.section.active { display: block; }
-
-/* ===== EXAM SECTION ===== */
-#exam-section {
-  background: var(--paper);
-  min-height: calc(100vh - 52px);
-  padding: 0;
-}
-
-.exam-header {
-  background: var(--paper);
-  border-bottom: 2px solid var(--ink);
-  padding: 3rem 0 2rem;
-  position: relative;
-  overflow: hidden;
-}
-.exam-header::before {
-  content: '';
-  position: absolute;
-  left: 80px;
-  top: 0; bottom: 0;
-  width: 1px;
-  background: var(--margin-line);
-}
-.exam-header-inner {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 2rem 0 120px;
-}
-.exam-course-code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  color: var(--ink-muted);
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-.exam-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.2;
-  margin-bottom: 0.4rem;
-}
-.exam-subtitle {
-  font-size: 14px;
-  color: var(--ink-light);
-  font-style: italic;
-  margin-bottom: 1.5rem;
-}
-.exam-meta {
-  display: flex;
-  gap: 2rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--ink-muted);
-}
-.exam-meta span { border-bottom: 1px solid var(--paper-rule); padding-bottom: 2px; }
-
-/* Stats bar */
-.stats-bar {
-  background: var(--paper-dark);
-  border-bottom: 1px solid var(--paper-rule);
-  padding: 0.75rem 0;
-  position: sticky;
-  top: 52px;
-  z-index: 50;
-}
-.stats-inner {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 2rem 0 120px;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-.stat-chip {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--ink-muted);
-}
-.stat-chip strong { color: var(--ink); }
-.stat-chip.correct strong { color: var(--green-pen); }
-.stat-chip.wrong strong { color: var(--red-pen); }
-.exam-progress-bar {
-  flex: 1;
-  height: 4px;
-  background: var(--paper-rule);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.exam-progress-fill {
-  height: 100%;
-  background: var(--blue-pen);
-  border-radius: 2px;
-  transition: width 0.4s ease;
-  width: 0%;
-}
-
-/* Exam body */
-.exam-body {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 2rem 2rem 4rem 120px;
-  position: relative;
-}
-.exam-body::before {
-  content: '';
-  position: absolute;
-  left: 80px;
-  top: 0; bottom: 0;
-  width: 1px;
-  background: var(--margin-line);
-}
-
-/* Ruled lines */
-.ruled-section {
-  background-image: repeating-linear-gradient(
-    transparent, transparent 31px, var(--paper-rule) 31px, var(--paper-rule) 32px
-  );
-  background-attachment: local;
-}
-
-.section-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border-bottom: 2px double var(--ink);
-  padding-bottom: 0.5rem;
-  margin: 2.5rem 0 1.5rem;
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-}
-.section-heading .q-count {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--ink-muted);
-  font-weight: 400;
-  text-transform: none;
-}
-
-/* Question card */
-.q-card {
-  margin-bottom: 2rem;
-  background: var(--paper);
-  border-left: 3px solid transparent;
-  padding: 1.25rem 1.25rem 1.25rem 1rem;
-  position: relative;
-  transition: border-color 0.3s;
-}
-.q-card.answered-correct { border-left-color: var(--green-pen); }
-.q-card.answered-wrong { border-left-color: var(--red-pen); }
-
-.q-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-.q-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--ink-muted);
-  min-width: 28px;
-  padding-top: 2px;
-}
-.q-text {
-  font-size: 15px;
-  color: var(--ink);
-  line-height: 1.7;
-  flex: 1;
-}
-.q-text code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  background: var(--paper-dark);
-  padding: 1px 5px;
-  border-radius: 3px;
-}
-.difficulty-badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  padding: 2px 7px;
-  border-radius: 2px;
-  text-transform: uppercase;
-  font-weight: 500;
-  flex-shrink: 0;
-}
-.badge-easy { background: #e8f5e9; color: var(--green-pen); border: 1px solid #a5d6a7; }
-.badge-medium { background: #fff8e1; color: #8a6000; border: 1px solid #ffe082; }
-.badge-hard { background: #fce4ec; color: var(--red-pen); border: 1px solid #f48fb1; }
-
-/* Options */
-.options { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
-.option-btn {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.6rem 0.85rem;
-  border: 1px solid var(--paper-rule);
-  background: transparent;
-  cursor: pointer;
-  text-align: left;
-  font-family: 'Source Serif 4', serif;
-  font-size: 14px;
-  color: var(--ink-light);
-  border-radius: 2px;
-  transition: all 0.15s;
-  line-height: 1.5;
-}
-.option-btn:hover:not(:disabled) {
-  background: var(--paper-dark);
-  border-color: var(--ink-muted);
-}
-.option-btn .opt-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--ink-muted);
-  min-width: 20px;
-  padding-top: 1px;
-  font-weight: 500;
-}
-.option-btn.correct {
-  background: #e8f5e9;
-  border-color: var(--green-pen);
-  color: var(--ink);
-}
-.option-btn.correct .opt-label { color: var(--green-pen); }
-.option-btn.wrong {
-  background: #fce4ec;
-  border-color: var(--red-pen);
-  color: var(--ink);
-}
-.option-btn.wrong .opt-label { color: var(--red-pen); }
-.option-btn.dimmed { opacity: 0.45; }
-.option-btn:disabled { cursor: default; }
-
-/* TF buttons */
-.tf-row { display: flex; gap: 0.75rem; margin-top: 0.75rem; }
-.tf-btn {
-  padding: 0.5rem 1.5rem;
-  border: 1px solid var(--paper-rule);
-  background: transparent;
-  cursor: pointer;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  color: var(--ink-light);
-  border-radius: 2px;
-  transition: all 0.15s;
-}
-.tf-btn:hover:not(:disabled) { background: var(--paper-dark); border-color: var(--ink-muted); }
-.tf-btn.correct { background: #e8f5e9; border-color: var(--green-pen); color: var(--green-pen); }
-.tf-btn.wrong { background: #fce4ec; border-color: var(--red-pen); color: var(--red-pen); }
-.tf-btn.dimmed { opacity: 0.45; }
-.tf-btn:disabled { cursor: default; }
-
-/* Feedback */
-.feedback {
-  margin-top: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-radius: 2px;
-  font-size: 13.5px;
-  line-height: 1.65;
-  color: var(--ink);
-  display: none;
-}
-.feedback.show { display: block; }
-.feedback.correct-fb { background: #f1f8e9; border-left: 3px solid var(--green-pen); }
-.feedback.wrong-fb { background: #fff3f3; border-left: 3px solid var(--red-pen); }
-.feedback-icon {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: 4px;
-}
-.feedback.correct-fb .feedback-icon { color: var(--green-pen); }
-.feedback.wrong-fb .feedback-icon { color: var(--red-pen); }
-
-/* Unanswered highlight */
-.q-card.unanswered-highlight {
-  background: #fff8e1;
-  border-left-color: #f0a500;
-  animation: pulse-warn 0.6s ease;
-}
-@keyframes pulse-warn {
-  0%, 100% { background: #fff8e1; }
-  50% { background: #ffe082; }
-}
-
-/* Submit + Score */
-.submit-area {
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 2px double var(--ink);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-.submit-btn {
-  padding: 0.85rem 3rem;
-  background: var(--blue-pen);
-  color: white;
-  border: none;
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.2s;
-}
-.submit-btn:hover { background: #0f2550; }
-.score-banner {
-  display: none;
-  width: 100%;
-  padding: 1.5rem 2rem;
-  border: 2px solid var(--ink);
-  background: var(--paper-dark);
-  text-align: center;
-}
-.score-banner.show { display: block; }
-.score-grade {
-  font-family: 'Playfair Display', serif;
-  font-size: 48px;
-  font-weight: 700;
-  color: var(--ink);
-}
-.score-details {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  color: var(--ink-muted);
-  margin-top: 0.5rem;
-}
-.score-msg {
-  font-style: italic;
-  font-size: 15px;
-  color: var(--ink-light);
-  margin-top: 0.75rem;
-}
-
-/* ===== FLASHCARD SECTION ===== */
-#flash-section {
-  background: var(--dark-bg);
-  min-height: calc(100vh - 52px);
-  padding: 2rem;
-}
-
-.flash-header {
-  max-width: 900px;
-  margin: 0 auto 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.flash-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  color: var(--dark-text);
-  font-style: italic;
-}
-.flash-title span {
-  font-style: normal;
-  font-size: 13px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--dark-muted);
-  display: block;
-  margin-top: 2px;
-}
-.flash-nav-hint {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--dark-muted);
-  text-align: right;
-  line-height: 1.8;
-}
-
-/* Filter buttons */
-.filter-bar {
-  max-width: 900px;
-  margin: 0 auto 1.5rem;
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-.filter-btn {
-  padding: 5px 14px;
-  border: 1px solid var(--dark-border);
-  background: transparent;
-  color: var(--dark-muted);
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 20px;
-  transition: all 0.2s;
-  letter-spacing: 0.03em;
-}
-.filter-btn:hover { border-color: var(--accent); color: var(--dark-text); }
-.filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-
-/* Flash progress */
-.flash-progress-row {
-  max-width: 900px;
-  margin: 0 auto 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.flash-progress-bar {
-  flex: 1;
-  height: 3px;
-  background: var(--dark-border);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.flash-progress-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 2px;
-  transition: width 0.3s ease;
-}
-.flash-counter {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--dark-muted);
-  min-width: 50px;
-  text-align: right;
-}
-
-/* Flashcard */
-.card-viewport {
-  max-width: 720px;
-  margin: 0 auto;
-  perspective: 1200px;
-}
-.flash-card {
-  width: 100%;
-  min-height: 320px;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-}
-.flash-card.flipped { transform: rotateY(180deg); }
-
-.card-face {
-  position: absolute;
-  inset: 0;
-  border-radius: 6px;
-  padding: 2.5rem;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 320px;
-}
-.card-front {
-  background: var(--dark-card);
-  border: 1px solid var(--dark-border);
-}
-.card-back {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border: 1px solid var(--accent);
-  transform: rotateY(180deg);
-}
-
-.card-category {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.card-category::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--dark-border);
-}
-.card-question {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  color: var(--dark-text);
-  line-height: 1.5;
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-.card-flip-hint {
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  color: var(--dark-muted);
-  text-align: center;
-  margin-top: 1.5rem;
-  opacity: 0.6;
-}
-
-.card-answer-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1rem;
-}
-.card-answer {
-  font-size: 15px;
-  color: var(--dark-text);
-  line-height: 1.75;
-  flex: 1;
-}
-.card-answer code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  background: rgba(124,106,247,0.12);
-  padding: 2px 6px;
-  border-radius: 3px;
-  color: #a89fff;
-}
-.card-answer .formula {
-  display: block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  background: rgba(0,0,0,0.3);
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-  border-left: 3px solid var(--accent);
-  margin: 0.75rem 0;
-  color: #d4cfff;
-}
-
-/* Flash nav arrows */
-.flash-arrows {
-  max-width: 720px;
-  margin: 1.5rem auto 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.flash-arrow-btn {
-  padding: 0.6rem 1.5rem;
-  border: 1px solid var(--dark-border);
-  background: transparent;
-  color: var(--dark-muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-.flash-arrow-btn:hover { border-color: var(--accent); color: var(--dark-text); }
-.flash-arrow-btn:disabled { opacity: 0.2; cursor: default; }
-.flip-count {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--dark-muted);
-}
+/* FLASHCARDS */
+#flash-section{background:var(--dark-bg);min-height:calc(100vh - 52px);padding:2rem;}
+.flash-header{max-width:900px;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.flash-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--dark-text);font-style:italic;}
+.flash-title span{font-style:normal;font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--dark-muted);display:block;margin-top:2px;}
+.flash-nav-hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dark-muted);text-align:right;line-height:1.8;}
+.filter-bar{max-width:900px;margin:0 auto 1.5rem;display:flex;gap:.5rem;flex-wrap:wrap;}
+.filter-btn{padding:5px 14px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border-radius:20px;transition:all .2s;letter-spacing:.03em;}
+.filter-btn:hover{border-color:var(--accent);color:var(--dark-text);}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:white;}
+.flash-progress-row{max-width:900px;margin:0 auto 1.5rem;display:flex;align-items:center;gap:1rem;}
+.flash-progress-bar{flex:1;height:3px;background:var(--dark-border);border-radius:2px;overflow:hidden;}
+.flash-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease;}
+.flash-counter{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dark-muted);min-width:50px;text-align:right;}
+.card-viewport{max-width:720px;margin:0 auto;perspective:1200px;}
+.flash-card{width:100%;min-height:300px;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+.flash-card.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;inset:0;border-radius:6px;padding:2.5rem;backface-visibility:hidden;display:flex;flex-direction:column;min-height:300px;}
+.card-front{background:var(--dark-card);border:1px solid var(--dark-border);}
+.card-back{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border:1px solid var(--accent);transform:rotateY(180deg);}
+.card-category{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem;}
+.card-category::after{content:'';flex:1;height:1px;background:var(--dark-border);}
+.card-question{font-family:'Playfair Display',serif;font-size:19px;color:var(--dark-text);line-height:1.5;flex:1;display:flex;align-items:center;}
+.card-flip-hint{font-family:'Inter',sans-serif;font-size:11px;color:var(--dark-muted);text-align:center;margin-top:1.5rem;opacity:.6;}
+.card-answer-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+.card-answer{font-size:14px;color:var(--dark-text);line-height:1.8;flex:1;}
+.card-answer code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(124,106,247,.12);padding:2px 6px;border-radius:3px;color:#a89fff;}
+.flash-arrows{max-width:720px;margin:1.5rem auto 0;display:flex;justify-content:space-between;align-items:center;}
+.flash-arrow-btn{padding:.6rem 1.5rem;border:1px solid var(--dark-border);background:transparent;color:var(--dark-muted);font-family:'JetBrains Mono',monospace;font-size:13px;cursor:pointer;border-radius:4px;transition:all .2s;}
+.flash-arrow-btn:hover{border-color:var(--accent);color:var(--dark-text);}
+.flash-arrow-btn:disabled{opacity:.2;cursor:default;}
+.flip-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dark-muted);}
 </style>
 </head>
 <body>
 
 <nav class="top-nav">
   <span class="nav-logo">AI 447 — Computer Vision</span>
-  <button class="nav-tab active" onclick="switchTab('exam')">📝 Final Exam</button>
-  <button class="nav-tab" onclick="switchTab('flash')">🃏 Flashcards</button>
+  <button class="nav-tab active" onclick="switchTab('exam',this)">📝 Final Exam</button>
+  <button class="nav-tab" onclick="switchTab('flash',this)">🃏 Flashcards</button>
 </nav>
 
-<!-- ===== EXAM SECTION ===== -->
 <div id="exam-section" class="section active">
-
   <div class="exam-header">
     <div class="exam-header-inner">
       <div class="exam-course-code">AI 447 — Computer Vision &nbsp;|&nbsp; Chapter 12</div>
@@ -675,7 +141,6 @@ body {
       </div>
     </div>
   </div>
-
   <div class="stats-bar">
     <div class="stats-inner">
       <div class="stat-chip">Answered: <strong id="stat-answered">0</strong>/30</div>
@@ -684,47 +149,32 @@ body {
       <div class="exam-progress-bar"><div class="exam-progress-fill" id="exam-prog"></div></div>
     </div>
   </div>
-
-  <div class="exam-body ruled-section" id="exam-body">
-    <!-- Dynamically generated -->
-  </div>
-
+  <div class="exam-body ruled-section" id="exam-body"></div>
 </div>
 
-<!-- ===== FLASHCARD SECTION ===== -->
 <div id="flash-section" class="section">
   <div class="flash-header">
-    <div class="flash-title">
-      Study Flashcards
-      <span>Vision Transformer (ViT) — 20 cards</span>
-    </div>
-    <div class="flash-nav-hint">
-      ← → Arrow keys to navigate<br>
-      Space / Click to flip
-    </div>
+    <div class="flash-title">Study Flashcards<span>Vision Transformer (ViT) — 20 cards</span></div>
+    <div class="flash-nav-hint">← → Arrow keys to navigate<br>Space / Click to flip</div>
   </div>
-
   <div class="filter-bar" id="filter-bar"></div>
-
   <div class="flash-progress-row">
     <div class="flash-progress-bar"><div class="flash-progress-fill" id="flash-prog"></div></div>
     <div class="flash-counter" id="flash-counter">1 / 20</div>
   </div>
-
   <div class="card-viewport">
     <div class="flash-card" id="flash-card" onclick="flipCard()">
       <div class="card-face card-front">
-        <div class="card-category" id="card-category">Architecture</div>
-        <div class="card-question" id="card-question">Loading...</div>
+        <div class="card-category" id="card-category"></div>
+        <div class="card-question" id="card-question"></div>
         <div class="card-flip-hint">Click or press Space to reveal answer</div>
       </div>
       <div class="card-face card-back">
         <div class="card-answer-label">Answer</div>
-        <div class="card-answer" id="card-answer">Loading...</div>
+        <div class="card-answer" id="card-answer"></div>
       </div>
     </div>
   </div>
-
   <div class="flash-arrows">
     <button class="flash-arrow-btn" id="prev-btn" onclick="flashNav(-1)" disabled>← Previous</button>
     <span class="flip-count" id="flip-count">Not flipped yet</span>
@@ -733,713 +183,657 @@ body {
 </div>
 
 <script>
-// ===== EXAM DATA =====
+// =====================================================================
+// ALL QUESTIONS STRICTLY FROM THE 12 SLIDES
+// Slide 1: What is ViT (4 bullet points)
+// Slide 2: Architecture diagram (patches→embed→[CLS]→encoder→MLP head)
+// Slide 3: Architecture steps 1-5
+// Slide 4: Architecture steps detail (patch split, flatten/embed, pos enc, encoder, [CLS] for classification)
+// Slide 5: Q, K, V definitions + Wq Wk Wv
+// Slide 6: Why multiply attention scores with V (Q·Kᵀ, softmax, weight V)
+// Slide 7: Example setup — 4 patches (cat head, cat body, rug, wall)
+// Slide 8: Step1 generate Q/K/V, Step2 compute scores for Patch1 as query
+// Slide 9: Step3 use attention on V, Output1 = S1·V1+S2·V2+S3·V3+S4·V4
+// Slide 10: Why multiply by V (V = actual content/features)
+// Slide 11: Role of [CLS] token (4 bullet points)
+// Slide 12: Final steps (MHA, Add&Norm, MLP, Add&Norm, [CLS]→MLP Head→Class)
+// =====================================================================
+
 const mcqQuestions = [
+  // Slide 1
   {
-    q: "What is the primary motivation for using patches in Vision Transformer (ViT) instead of processing individual pixels?",
+    q: "According to the slides, which of the following is NOT listed as a key characteristic of Vision Transformer (ViT)?",
     opts: [
-      "Pixel-level processing is computationally intractable for self-attention, which scales as O(n²) with sequence length",
-      "Patches allow the model to use convolutional operations internally",
-      "Patches eliminate the need for positional encoding",
-      "Individual pixel processing would prevent the use of a [CLS] token"
-    ],
-    ans: 0,
-    diff: "medium",
-    correctFb: "Correct! Self-attention has O(n²) complexity with respect to sequence length. For a 224×224 image, processing individual pixels would require attention over 50,176 tokens — completely intractable. Splitting into 16×16 patches reduces this to 196 tokens, making ViT feasible.",
-    wrongFb: "The core problem is computational. Self-attention computes relationships between every pair of tokens, scaling as O(n²). A 224×224 image at the pixel level has 50,176 tokens, making the attention matrix 50,176² ≈ 2.5 billion entries. Patches (16×16) reduce this to only 196 tokens."
-  },
-  {
-    q: "For a 384×384 image with patch size 32×32, how many patch tokens are fed into the Transformer Encoder (excluding the [CLS] token)?",
-    opts: ["144 tokens", "196 tokens", "256 tokens", "576 tokens"],
-    ans: 0,
-    diff: "hard",
-    correctFb: "Correct! Number of patches = (384/32)² = 12² = 144. This is a straightforward calculation: divide each spatial dimension by the patch size, then square the result. The [CLS] token is added separately, making the total sequence length 145.",
-    wrongFb: "The formula is: N = (H/P)² where H=image size and P=patch size. Here: (384/32)² = 12² = 144 patch tokens. Note that 196 = (224/16)² and 256 = (256/16)², which are other common configurations. The [CLS] token is additional and separate."
-  },
-  {
-    q: "In the attention formula Attention(Q,K,V) = Softmax(QKᵀ/√d_k)V, what is the purpose of dividing by √d_k?",
-    opts: [
-      "To normalize the output values to lie between 0 and 1",
-      "To prevent extremely large dot products that push softmax into regions of near-zero gradients",
-      "To ensure the Keys and Queries have unit norm",
-      "To balance the contribution of Q and K equally"
-    ],
-    ans: 1,
-    diff: "hard",
-    correctFb: "Correct! When d_k is large, dot products Q·K grow large in magnitude, which pushes softmax into regions where its derivative (softmax × (1 − softmax)) becomes extremely small — vanishing gradients. Dividing by √d_k keeps the variance of the dot products at approximately 1, regardless of d_k.",
-    wrongFb: "The issue is about gradient flow during training. In high dimensions, Q·K dot products have variance d_k (if Q,K have unit-variance entries). Feeding large values into softmax causes it to saturate: one value gets ≈1 probability and all others ≈0, making gradients vanish. Dividing by √d_k brings variance back to 1."
-  },
-  {
-    q: "Which of the following correctly describes the 'Linear Projection of Flattened Patches' step in ViT?",
-    opts: [
-      "A convolutional layer that slides over the image extracting local features",
-      "A learned weight matrix Wₑ that maps each flattened patch vector to a D-dimensional embedding space",
-      "A fixed Fourier transform applied to each patch to extract frequency features",
-      "A pooling operation that compresses each patch to a single representative value"
-    ],
-    ans: 1,
-    diff: "medium",
-    correctFb: "Correct! Each patch is first flattened to a vector of length P²·C (e.g., 16²·3=768 for 16×16 RGB patches), then multiplied by a learnable embedding matrix Wₑ ∈ ℝ^(P²C × D). This projects it to the model's embedding dimension D, exactly like a word embedding lookup in NLP Transformers.",
-    wrongFb: "The key word is 'learned' and 'linear.' ViT does NOT use convolutions in this step — it is a simple matrix multiplication (fully connected layer) that projects the raw flattened patch pixels into the D-dimensional embedding space. The matrix is learned during training."
-  },
-  {
-    q: "What is the role of the [CLS] token in ViT, and how is it initialized?",
-    opts: [
-      "It encodes the first patch and is initialized with the top-left patch's embedding",
-      "It is a learned embedding initialized randomly, prepended to the patch sequence, and its final hidden state is used for classification",
-      "It is the average pooling of all patch embeddings at the final layer",
-      "It encodes positional information and is initialized with sinusoidal functions"
-    ],
-    ans: 1,
-    diff: "easy",
-    correctFb: "Correct! [CLS] is an extra learnable token prepended to the sequence. It has no corresponding image region — it learns during training to aggregate global information from all patches through self-attention. After L encoder layers, the hidden state of [CLS] (not any patch token) is fed to the classification MLP head.",
-    wrongFb: "The [CLS] token does not come from the image. It is randomly initialized and learned end-to-end. Its purpose is purely functional: through L layers of multi-head attention, it attends to every patch and aggregates their information. The classification head only reads the [CLS] output, not the patch outputs."
-  },
-  {
-    q: "In Multi-Head Attention with H heads and model dimension D, what is the dimensionality of Q, K, V projections per head?",
-    opts: [
-      "D for each head",
-      "D/H for each head",
-      "D × H for each head",
-      "√D for each head"
-    ],
-    ans: 1,
-    diff: "hard",
-    correctFb: "Correct! Each head operates on a projected subspace of dimension d_k = d_v = D/H. For example, if D=768 and H=12, each head has dimension 64. The H heads' outputs (each of size D/H) are concatenated to recover the full D-dimensional representation, which is then projected by Wₒ.",
-    wrongFb: "Multi-Head Attention splits the model dimension D across H heads. Each head independently computes attention in a reduced dimension d_k = D/H. This keeps the total computation similar to single-head attention while allowing each head to specialize in different relationship types. With D=768, H=12: each head dimension = 64."
-  },
-  {
-    q: "What is the purpose of the residual (skip) connection in the Transformer Encoder block?",
-    opts: [
-      "It allows the model to skip certain attention heads during inference",
-      "It doubles the effective batch size by reusing computations",
-      "It allows gradients to flow directly through the network, mitigating vanishing gradient problems in deep architectures",
-      "It averages the attention output with the input to reduce overfitting"
-    ],
-    ans: 2,
-    diff: "medium",
-    correctFb: "Correct! The residual connection (x → x + Sublayer(x)) creates a 'highway' for gradients to flow backward without passing through the sublayer. In deep networks (12-24 layers), without this, gradients may vanish before reaching early layers. It also means the sublayer only needs to learn a residual function, which is easier than learning the full transformation.",
-    wrongFb: "Residual connections are about gradient propagation, not inference efficiency. In deep networks, the backpropagation chain product of Jacobians can shrink exponentially (vanishing gradients). By adding x directly to the sublayer output, we guarantee a gradient of at least 1 flows back unconditionally, regardless of the sublayer's behavior."
-  },
-  {
-    q: "How does ViT handle positional information, and why is it necessary?",
-    opts: [
-      "Via 2D convolutional layers that naturally encode spatial structure",
-      "Positional encoding is not needed since patch order is preserved",
-      "By adding learnable 1D positional embeddings to patch embeddings, because self-attention is permutation-invariant",
-      "By encoding row and column indices into the patch pixel values before flattening"
-    ],
-    ans: 2,
-    diff: "medium",
-    correctFb: "Correct! Self-attention is permutation-invariant — shuffling the input tokens produces the same outputs in shuffled order. Without positional encoding, the model cannot distinguish patch (0,0) from patch (5,3). ViT adds learnable 1D positional embeddings (one per position, of dimension D) to the patch embeddings before feeding them to the encoder.",
-    wrongFb: "The key insight is that self-attention treats its input as a set, not a sequence — it is permutation-invariant. If you shuffle all patches, the attention outputs shuffle identically, with no sense of 'before' or 'after.' Positional encodings break this symmetry by injecting position information into each token's embedding."
-  },
-  {
-    q: "The output of the Transformer Encoder for a sequence of 197 tokens (196 patches + 1 [CLS]) has shape:",
-    opts: [
-      "197 × (D/H), where H is the number of heads",
-      "197 × D, preserving the sequence length and embedding dimension",
-      "1 × D, since all patch information is aggregated",
-      "196 × D, since [CLS] is consumed and removed after each layer"
-    ],
-    ans: 1,
-    diff: "medium",
-    correctFb: "Correct! The Transformer Encoder is sequence-to-sequence: it maps 197 input tokens (each D-dimensional) to 197 output tokens (each D-dimensional). The sequence length and embedding dimension are preserved throughout all L layers. It is only at the final step that we select the [CLS] token's output for classification.",
-    wrongFb: "A key property of Transformer Encoders is that they are sequence-preserving: input shape = output shape. 197 tokens of dimension D in → 197 tokens of dimension D out. This holds through all L layers. The [CLS] token is not removed until we need to classify — at which point we simply index position 0."
-  },
-  {
-    q: "In the Value matrix computation, V = X·Wᵥ, what does V represent conceptually?",
-    opts: [
-      "A metric that measures the relevance of each patch to the query",
-      "The actual feature content that gets aggregated weighted by attention scores",
-      "A normalized version of the Key to ensure numerical stability",
-      "The positional information of each patch in the image"
-    ],
-    ans: 1,
-    diff: "easy",
-    correctFb: "Correct! Q and K are used only to compute 'where to look' (the attention weights via QKᵀ). V is the 'what to take' — the actual feature representation that gets collected and mixed. High attention weight on a patch means its V vector contributes more to the output. V is the information content that flows to wherever attention points.",
-    wrongFb: "Think of Q·K as a matching/search mechanism and V as the content retrieved. Q says 'I'm looking for this,' K says 'I have this to offer,' and V says 'here's what I actually give you if matched.' Attention scores (from Q·K) are just routing coefficients — they determine how much of each V to include in the output."
-  },
-  {
-    q: "Which statement best describes the computational complexity of self-attention in ViT with respect to the number of patches N?",
-    opts: [
-      "O(N) — linear, since each patch only attends to its neighbors",
-      "O(N log N) — like a tree-structured attention",
-      "O(N²) — quadratic, since every patch pair computes a dot product",
-      "O(N²·D) — quadratic in patches and linear in embedding dimension"
-    ],
-    ans: 2,
-    diff: "hard",
-    correctFb: "Correct! The attention score matrix S = QKᵀ has shape N×N, requiring N² dot products. For N=196 patches, this is 38,416 operations per head — manageable. But for larger images (more patches), this quadratic scaling becomes a bottleneck. This is why efficient variants like Swin Transformer use local window attention to reduce complexity to O(N).",
-    wrongFb: "Self-attention computes dot products between all pairs of tokens. With N tokens, this produces an N×N score matrix, requiring N² dot product computations. The full complexity including the D dimension is O(N²·D), but the dominant scaling issue is the N² term, which is why ViT prefers large patches (smaller N) over small patches."
-  },
-  {
-    q: "After the final Transformer Encoder layer, the MLP classification head in ViT takes as input:",
-    opts: [
-      "The concatenation of all 197 token outputs",
-      "The average of all 196 patch token outputs",
-      "Only the output corresponding to the [CLS] token (position 0)",
-      "The maximum-valued token output across all positions"
+      "It applies transformer architecture to image classification",
+      "It splits the image into patches and embeds them",
+      "It uses convolutional layers to extract local features",
+      "It processes patches with a self-attention mechanism"
     ],
     ans: 2,
     diff: "easy",
-    correctFb: "Correct! Only the [CLS] token's final representation is passed to the MLP head. After L attention layers, the [CLS] token has attended to all patch tokens and aggregated global image information. The D-dimensional [CLS] output is fed to a simple 2-layer MLP (with one hidden layer), which outputs logits over classes.",
-    wrongFb: "ViT uses the [CLS] token output exclusively. While averaging all patch outputs (option B) is a valid alternative used by some models, the original ViT paper uses the [CLS] token. The [CLS] token's purpose is precisely to aggregate all relevant information through attention so that a single vector is sufficient for classification."
+    correctFb: "Correct! The slides list four characteristics of ViT: (1) applies transformer architecture, (2) splits image into patches and embeds them, (3) adds positional information, (4) processes patches with self-attention. Convolutional layers are a CNN feature — ViT replaces them with self-attention.",
+    wrongFb: "Re-read Slide 1. The four listed characteristics of ViT are: applies transformer architecture to image classification, splits image into patches and embeds them, adds positional information to retain spatial layout, and processes patches with self-attention. Convolutional layers are not mentioned — that is a CNN feature."
   },
+  // Slide 1
   {
-    q: "Layer Normalization in ViT is applied BEFORE (Pre-LN) the sub-layers in modern implementations. What is the main advantage over Post-LN (normalizing after the sub-layer)?",
+    q: "According to the slides, why is positional information added to patch embeddings in ViT?",
     opts: [
-      "Pre-LN allows the model to use larger learning rates and trains more stably",
-      "Pre-LN doubles the effective depth of the network",
-      "Pre-LN eliminates the need for residual connections",
-      "Pre-LN reduces the number of parameters significantly"
+      "To increase the dimensionality of each patch vector",
+      "To retain the spatial layout of the image",
+      "To allow the model to perform multi-class classification",
+      "To speed up the softmax computation"
     ],
-    ans: 0,
-    diff: "hard",
-    correctFb: "Correct! Pre-LN (norm before sub-layer) was found to train more stably and allow larger learning rates without warm-up schedules. In Post-LN, the residual path is un-normalized, which can cause gradient instability at initialization. Pre-LN ensures the input to each sub-layer is always normalized, leading to smoother optimization landscapes.",
-    wrongFb: "The distinction between Pre-LN and Post-LN is about training stability, not architecture depth or parameter count. Post-LN (original Transformer) requires careful learning rate warm-up because gradients can be unstable early in training. Pre-LN normalizes before the sub-layer, ensuring stable gradient magnitudes throughout training — particularly important for deep ViT models."
+    ans: 1,
+    diff: "easy",
+    correctFb: "Correct! Slide 1 explicitly states: 'Adds positional information to retain spatial layout.' Without it, the model cannot distinguish which part of the image each patch came from.",
+    wrongFb: "Slide 1 gives a direct answer: positional information is added 'to retain spatial layout.' The self-attention mechanism treats all patches as a set and has no inherent sense of position — positional encoding fixes this."
   },
+  // Slide 3 / Slide 4
   {
-    q: "In ViT, the Multi-Head Attention output for H heads is computed as Concat(head₁,...,headH)·Wₒ. What is the shape of the output projection matrix Wₒ?",
+    q: "According to the slides, what is the FIRST step in the ViT architecture pipeline?",
     opts: [
-      "(D/H) × D",
-      "D × (D/H)",
-      "(H·D/H) × D = D × D",
-      "H × H"
+      "Add positional encoding to the patch embeddings",
+      "Feed the patch sequence into the transformer encoder",
+      "Split the image into patches (e.g., 16×16)",
+      "Use the [CLS] token's output for classification"
     ],
     ans: 2,
-    diff: "hard",
-    correctFb: "Correct! Each head outputs a vector of dimension D/H. Concatenating H heads gives H·(D/H) = D dimensions. The output projection Wₒ maps from this D-dimensional concatenation back to the D-dimensional model space, so Wₒ ∈ ℝ^(D×D). This allows learned mixing of information across all heads.",
-    wrongFb: "Work through the dimensions: each head produces a (D/H)-dimensional output. After concatenating H heads: H × (D/H) = D dimensions. The projection matrix Wₒ must take this D-dimensional vector and output D dimensions (to maintain the model's internal dimension D), so Wₒ ∈ ℝ^(D×D)."
+    diff: "easy",
+    correctFb: "Correct! Slide 3 lists the steps in order: (1) Split image into patches e.g. 16×16, (2) Flatten and embed each patch, (3) Add positional encoding, (4) Feed sequence into transformer encoder, (5) Use [CLS] token's output for classification.",
+    wrongFb: "Slide 3 gives the ordered steps. Step 1 is 'Split image into patches (e.g., 16×16).' Positional encoding (step 3) and encoder feeding (step 4) come later. Classification (step 5) is the very last step."
   },
+  // Slide 3 / Slide 4
   {
-    q: "Which of the following is NOT a component of a standard ViT Transformer Encoder block?",
+    q: "According to the slides, what is used for final image classification in ViT?",
     opts: [
-      "Multi-Head Self-Attention",
-      "Layer Normalization",
-      "Position-wise Feed-Forward Network (MLP)",
-      "Max Pooling over the spatial patch dimension"
+      "The average of all patch token outputs",
+      "The output of the last patch in the sequence",
+      "The [CLS] token's output fed into the MLP Head",
+      "A global max-pooling over all transformer outputs"
+    ],
+    ans: 2,
+    diff: "easy",
+    correctFb: "Correct! Slides 3, 11, and 12 all state this consistently: the [CLS] token's output is taken after the transformer encoder and fed into the MLP Head to produce the class prediction.",
+    wrongFb: "The slides are very specific: Step 5 in Slide 3 states 'Use [CLS] token's output for classification.' Slide 12 confirms: 'Output of [CLS] → MLP Head → Class Prediction.' The [CLS] token aggregates global information from all patches."
+  },
+  // Slide 5
+  {
+    q: "In the slides, Q (Query) is defined as:",
+    opts: [
+      "The actual content/features to be passed if attended",
+      "What each patch offers to be queried against",
+      "What the patch is querying for",
+      "A normalized similarity score between two patches"
+    ],
+    ans: 2,
+    diff: "easy",
+    correctFb: "Correct! Slide 5 gives exact definitions: Q = 'What the patch is querying for', K = 'What each patch offers to be queried against', V = 'Actual content/features to be passed if attended.'",
+    wrongFb: "Slide 5 provides exact definitions. Q = 'What the patch is querying for.' The option 'actual content/features' is the definition of V (Value). 'What each patch offers to be queried against' is the definition of K (Key)."
+  },
+  // Slide 5
+  {
+    q: "According to the slides, how are Q, K, and V generated for each patch?",
+    opts: [
+      "By applying convolutional filters of different sizes to each patch",
+      "By passing each patch vector through 3 separate learnable linear layers using Wq, Wk, Wv",
+      "By averaging the embeddings of neighboring patches",
+      "By applying a single shared linear layer and then splitting the output into three parts"
+    ],
+    ans: 1,
+    diff: "medium",
+    correctFb: "Correct! Slide 5 states: 'We pass each patch vector into 3 separate learnable linear layers to generate Q, K, V for each patch. Generated using linear projections: Wq, Wk, Wv.' The three matrices are separate and learned.",
+    wrongFb: "Slide 5 is explicit: Q, K, V are generated by passing each patch vector through '3 separate learnable linear layers' (Wq, Wk, Wv). There is no convolution, no averaging of neighbors, and no splitting of a single output — they are three independent projections."
+  },
+  // Slide 6
+  {
+    q: "According to the slides, what does Q · Kᵀ produce in the attention mechanism?",
+    opts: [
+      "The final weighted representation of each patch",
+      "Similarity (attention) scores between patches",
+      "The positional encoding of each patch",
+      "The Value vectors normalized across all patches"
+    ],
+    ans: 1,
+    diff: "easy",
+    correctFb: "Correct! Slide 6 states: 'Q · Kᵀ gives similarity (attention) scores.' These raw scores are then normalized by Softmax before being used to weight the V vectors.",
+    wrongFb: "Slide 6 directly answers this: 'Q · Kᵀ gives similarity (attention) scores.' The weighted representation comes later (after multiplying by V). Positional encoding is a separate step added before the encoder."
+  },
+  // Slide 6
+  {
+    q: "According to the slides, what is the role of Softmax in the attention mechanism?",
+    opts: [
+      "It generates the Q, K, V vectors from the patch embeddings",
+      "It applies positional information to each patch",
+      "It normalizes the attention scores across patches",
+      "It produces the final class prediction from the [CLS] token"
+    ],
+    ans: 2,
+    diff: "easy",
+    correctFb: "Correct! Slide 6 states: 'Softmax normalizes scores across patches.' After Q·Kᵀ produces raw similarity scores, Softmax converts them into a distribution (values that sum to 1) that can be used as weights for the V vectors.",
+    wrongFb: "Slide 6 explicitly states: 'Softmax normalizes scores across patches.' Q/K/V generation is done by linear projections (Wq, Wk, Wv). Positional encoding is a separate pre-encoder step. Class prediction is done by the MLP Head."
+  },
+  // Slide 7 / Slide 8
+  {
+    q: "In the example from the slides (4-patch cat image), which patches are used in the example setup?",
+    opts: [
+      "Cat Head, Cat Tail, Floor, Window",
+      "Cat Head, Cat Body, Rug, Wall",
+      "Eye, Nose, Fur, Background",
+      "Patch A, Patch B, Patch C, Patch D"
+    ],
+    ans: 1,
+    diff: "easy",
+    correctFb: "Correct! Slide 7 explicitly names the 4 patches: Patch 1: Cat Head, Patch 2: Cat Body, Patch 3: Rug, Patch 4: Wall. This concrete example is used to demonstrate the Q, K, V attention computation.",
+    wrongFb: "Slide 7 names the four patches exactly: Patch 1: Cat Head, Patch 2: Cat Body, Patch 3: Rug, Patch 4: Wall. These specific names are used throughout Slides 7–9 to walk through the attention calculation."
+  },
+  // Slide 8
+  {
+    q: "In the attention score computation shown in the slides (Step 2), which patch is used as the Query?",
+    opts: [
+      "Patch 2 (Cat Body)",
+      "Patch 4 (Wall)",
+      "The [CLS] token",
+      "Patch 1 (Cat Head)"
     ],
     ans: 3,
     diff: "easy",
-    correctFb: "Correct! Max Pooling is a CNN operation and is absent from the Transformer Encoder. The standard encoder block contains: LayerNorm → Multi-Head Self-Attention → Add (residual) → LayerNorm → MLP (two linear layers with GELU) → Add (residual). There are no pooling operations; spatial aggregation happens through attention.",
-    wrongFb: "Max Pooling is characteristic of CNNs, not Transformers. The Transformer Encoder aggregates spatial information through attention, not pooling. The [CLS] token serves as a 'soft' aggregator through learned attention weights. Introducing hard max-pooling would discard information and break the differentiable attention mechanism."
+    correctFb: "Correct! Slide 8 states: 'Step 2: Attention Score Computation (Patch 1 as Query). We compute the dot product between Q₁ (Query of Patch 1) and every other patch's Key.' The example demonstrates Q1 attending to K1, K2, K3, K4.",
+    wrongFb: "Slide 8 is explicit: 'Step 2: Attention Score Computation (Patch 1 as Query).' The slide computes Q1·K1, Q1·K2, Q1·K3, Q1·K4 — using Q1 (Patch 1, Cat Head) as the query against all four Keys."
   },
+  // Slide 8
   {
-    q: "A researcher trains ViT-Base (patch size 16, image size 224×224) on a small dataset of 10,000 images. Compared to training on ImageNet-21k (14M images), what behavior is most expected?",
+    q: "According to Slide 8, after computing the raw scores [S1, S2, S3, S4] for Patch 1 as query, what operation is applied next?",
     opts: [
-      "ViT will outperform ResNet on the small dataset since attention is more powerful",
-      "ViT will underperform CNNs on the small dataset due to lack of inductive biases like translation equivariance",
-      "ViT will perform equally since its architecture is data-independent",
-      "ViT will perform better because positional encoding provides enough regularization"
-    ],
-    ans: 1,
-    diff: "medium",
-    correctFb: "Correct! This is one of ViT's key limitations noted in the original paper. CNNs have built-in inductive biases: local connectivity, translation equivariance, and weight sharing across positions. ViT must learn all of these from data. With limited data, CNNs generalize better. ViT excels when pre-trained on large datasets (JFT-300M, ImageNet-21k) and fine-tuned.",
-    wrongFb: "The original ViT paper explicitly states this finding: 'ViT does not generalize well when trained on insufficient amounts of data.' Unlike CNNs, ViT has no inductive biases about the 2D structure of images — it treats all patch pairs equally regardless of spatial proximity. CNNs' local convolutions act as strong regularizers that help with small datasets."
-  },
-  {
-    q: "What is the key difference between the Q·K dot product before and after applying Softmax in the attention mechanism?",
-    opts: [
-      "Before: raw similarity scores (unbounded real numbers); After: normalized probability distribution summing to 1",
-      "Before: probabilities between 0 and 1; After: log probabilities between -∞ and 0",
-      "Before: L2-normalized vectors; After: cosine similarities",
-      "There is no difference — Softmax is only applied for numerical stability"
-    ],
-    ans: 0,
-    diff: "medium",
-    correctFb: "Correct! Q·K produces raw dot product scores — unbounded real numbers (can be negative, zero, or large positive values). These are first divided by √d_k, then Softmax converts them to a probability distribution over all tokens, where all values are in (0,1) and sum to exactly 1. This allows the scores to be used as mixing weights for the V vectors.",
-    wrongFb: "The transformation through Softmax is fundamental. Raw dot products are unbounded real numbers — just similarity scores. Softmax applies exp() to each score and normalizes, converting them to a valid probability distribution: all values ∈ (0,1), summing to 1. These become attention weights that determine how much of each V vector contributes to the output."
-  },
-  {
-    q: "In the self-attention output computation Output₁ = Σᵢ aᵢ·Vᵢ (where aᵢ are attention weights), what property of this weighted sum makes it useful for representation learning?",
-    opts: [
-      "It is a sparse selection, always setting most aᵢ to exactly 0",
-      "It is a differentiable, soft aggregation that allows gradient-based learning of which patches to attend to",
-      "It guarantees that the output has higher L2 norm than any individual V",
-      "It produces a binary mask that highlights attended regions"
-    ],
-    ans: 1,
-    diff: "hard",
-    correctFb: "Correct! The soft weighted sum is fully differentiable with respect to Q, K, and V, enabling end-to-end gradient-based training. Gradients flow back through the softmax and dot products to update Wq, Wk, Wv. This 'softness' (vs. hard selection) is crucial — it allows the model to interpolate between patches and learn graded relevance rather than binary attend/ignore decisions.",
-    wrongFb: "The power of attention lies in its differentiability. Unlike hard attention (which selects one patch), soft attention computes a weighted sum with gradients flowing through every weight aᵢ. This allows backpropagation to gradually adjust what the model attends to. The softmax ensures all weights are non-zero (never exactly 0), keeping gradient paths open to all patches."
-  },
-  {
-    q: "ViT uses 1D positional encodings even though images are 2D. What is the consequence of this design choice?",
-    opts: [
-      "The model cannot distinguish images of different aspect ratios but this has no practical consequence",
-      "The model must be re-trained from scratch for any image size change",
-      "Relative 2D relationships (above, below, diagonal) are not explicitly encoded but can be learned implicitly from sufficient training data",
-      "The model loses all spatial information and must rely on pixel intensity patterns alone"
+      "The scores are directly multiplied by the V vectors",
+      "The scores are passed through a linear layer",
+      "Softmax is applied to normalize the scores",
+      "The scores are averaged to get a single attention weight"
     ],
     ans: 2,
-    diff: "hard",
-    correctFb: "Correct! 1D positional encoding assigns a unique index to each patch position but doesn't explicitly encode 2D spatial structure (e.g., 'patch A is directly above patch B'). However, with enough training data, the model can learn to associate position indices with 2D layouts implicitly. The ViT paper notes that 2D-aware positional encodings sometimes help but the difference is small at large scale.",
-    wrongFb: "1D positional encodings don't explicitly communicate 2D spatial structure, but they don't eliminate spatial information either. Each patch position gets a unique learned vector, and the model can learn correlations between position indices and spatial relationships. The original ViT paper experimented with 2D positional encodings and found only marginal improvements over 1D when using large-scale pre-training."
+    diff: "medium",
+    correctFb: "Correct! Slide 8 shows: after computing raw scores [S1, S2, S3, S4], the instruction says 'Apply softmax to normalize scores.' Only after this normalization step are the scores used to weight the V vectors in Step 3.",
+    wrongFb: "Slide 8 shows the pipeline clearly: (1) Compute dot products Q1·K1, Q1·K2, Q1·K3, Q1·K4 → raw scores [S1,S2,S3,S4], then (2) 'Apply softmax to normalize scores.' Multiplying by V comes in Step 3 (Slide 9), only after Softmax."
   },
+  // Slide 9
   {
-    q: "The Feed-Forward Network (MLP) inside each Transformer Encoder block applies transformations patch-by-patch. How does this differ from self-attention?",
+    q: "According to Slide 9, the output for Patch 1 as query is computed as:",
     opts: [
-      "MLP mixes information across all patches; self-attention operates independently per patch",
-      "Self-attention mixes information across all patches; MLP operates independently on each patch's representation",
-      "Both MLP and self-attention mix information across all patches simultaneously",
-      "MLP operates on the [CLS] token only; self-attention operates on patch tokens only"
+      "Output1 = max(V1, V2, V3, V4)",
+      "Output1 = S1·V1 + S2·V2 + S3·V3 + S4·V4",
+      "Output1 = (V1 + V2 + V3 + V4) / 4",
+      "Output1 = S1·Q1 + S2·Q2 + S3·Q3 + S4·Q4"
     ],
     ans: 1,
     diff: "medium",
-    correctFb: "Correct! This is a key architectural insight. Self-attention (QKᵀ) is the cross-token communication step — it mixes information across all patches. The MLP block is position-wise (applied independently to each token) — it processes each token's representation in isolation, deepening its feature transformation without mixing. Together, they alternate between 'mixing' (attention) and 'processing' (MLP) stages.",
-    wrongFb: "The two sub-layers have complementary roles. Self-attention: cross-patch communication (each patch aggregates information from all others). MLP: per-patch processing (each patch's vector is transformed independently by the same feedforward network). This separation — 'communicate then process' — repeated L times, builds rich contextual representations."
+    correctFb: "Correct! Slide 9 gives the exact formula: 'Output1 = S1·V1 + S2·V2 + S3·V3 + S4·V4 (Weighted sum of all 4 V vectors).' The normalized scores S1–S4 weight each patch's Value vector to form the new representation of Patch 1.",
+    wrongFb: "Slide 9 provides the exact formula: Output1 = S1·V1 + S2·V2 + S3·V3 + S4·V4. This is a weighted sum of V vectors (not Q vectors, not max, not simple average). The weights S1–S4 come from the Softmax-normalized attention scores."
+  },
+  // Slide 9
+  {
+    q: "Slide 9 states that after computing Output1 for Patch 1, what must be done?",
+    opts: [
+      "Feed Output1 directly to the MLP Head for classification",
+      "Discard Output1 since only [CLS] is used",
+      "Repeat the same process for all patches",
+      "Re-compute Q, K, V using different weight matrices"
+    ],
+    ans: 2,
+    diff: "easy",
+    correctFb: "Correct! Slide 9 ends with the instruction: 'Repeat for all patches.' The attention computation shown for Patch 1 is illustrative — the same weighted sum formula is applied to every patch in the sequence.",
+    wrongFb: "Slide 9 explicitly says 'Repeat for all patches.' The example shows Patch 1 as query, but the same Q·K Softmax weighted-V computation is performed for every patch (and for [CLS]), not just Patch 1."
+  },
+  // Slide 10
+  {
+    q: "According to Slide 10, why do we multiply by V (Value) rather than stopping at the attention scores?",
+    opts: [
+      "Because V contains the positional information that Q and K lack",
+      "Because V contains the actual content/features, and attention decides which patches are relevant to gather that content from",
+      "Because V is used to re-compute the Q and K matrices in the next layer",
+      "Because multiplying by V normalizes the output to have unit variance"
+    ],
+    ans: 1,
+    diff: "medium",
+    correctFb: "Correct! Slide 10 states exactly: 'V contains the actual content/features (not just where to look like Q/K), so once the attention decides which patches are relevant, we gather and summarize their information using their V vectors.' Q/K = where to look; V = what to take.",
+    wrongFb: "Slide 10 gives the precise reason: 'V contains the actual content/features (not just where to look like Q/K), so once attention decides which patches are relevant, we gather and summarize their information using their V vectors.' Q and K are the routing mechanism; V is the actual information payload."
+  },
+  // Slide 11
+  {
+    q: "According to the slides, the [CLS] token is described as a 'special token added to the patch sequence.' Which of the following is listed as one of its properties?",
+    opts: [
+      "It is initialized with the embedding of the first patch",
+      "It has its own Q, K, V and attends to all patches",
+      "It is fixed and not updated during training",
+      "It only attends to the last patch in the sequence"
+    ],
+    ans: 1,
+    diff: "medium",
+    correctFb: "Correct! Slide 11 lists 4 properties of [CLS]: (1) special token added to patch sequence, (2) learns to aggregate global image information, (3) its final output is used for classification, (4) has its own Q, K, V and attends to all patches.",
+    wrongFb: "Slide 11 lists the properties of [CLS] explicitly. One of them is: 'Has its own Q, K, V and attends to all patches.' It is not initialized from a patch, it is learned (not fixed), and it attends to ALL patches — not just the last one."
+  },
+  // Slide 11
+  {
+    q: "Slide 11 states that [CLS] 'learns to aggregate global image information.' This happens through which mechanism?",
+    opts: [
+      "A separate pooling layer dedicated to the [CLS] token",
+      "Averaging the pixel values of all patches",
+      "The self-attention mechanism, where [CLS] has its own Q, K, V and attends to all patches",
+      "A recurrent connection that passes information sequentially through all patches"
+    ],
+    ans: 2,
+    diff: "medium",
+    correctFb: "Correct! Slide 11 explains that [CLS] 'has its own Q, K, V and attends to all patches.' Through the self-attention mechanism in each encoder layer, the [CLS] token can gather information from every patch, aggregating a global image representation.",
+    wrongFb: "Slide 11 directly explains the mechanism: [CLS] 'has its own Q, K, V and attends to all patches.' The aggregation happens through self-attention, not pooling, pixel averaging, or recurrence. The Q/K/V mechanism allows [CLS] to query information from any patch."
+  },
+  // Slide 12
+  {
+    q: "According to the Final Steps slide (Slide 12), what is the correct order of operations inside the Transformer Encoder?",
+    opts: [
+      "MLP → Add & Norm → Multi-Head Attention → Add & Norm",
+      "Multi-Head Attention → Add & Norm → Feed-Forward MLP → Add & Norm",
+      "Add & Norm → Multi-Head Attention → MLP → Add & Norm",
+      "Feed-Forward MLP → Multi-Head Attention → Add & Norm → Add & Norm"
+    ],
+    ans: 1,
+    diff: "medium",
+    correctFb: "Correct! Slide 12 lists the Final Steps in order: (1) Multi-Head Attention Layer, (2) Add & Norm, (3) Feed-Forward MLP, (4) Add & Norm again, (5) Output of [CLS] → MLP Head → Class Prediction.",
+    wrongFb: "Slide 12 gives the exact order: 1) Multi-Head Attention Layer, 2) Add & Norm, 3) Feed-Forward MLP, 4) Add & Norm again. Attention comes BEFORE MLP, and both are followed by their own Add & Norm step."
+  },
+  // Slide 12
+  {
+    q: "In Slide 12, what is the very last step that produces the final class prediction?",
+    opts: [
+      "Add & Norm applied to all patch outputs",
+      "The Feed-Forward MLP inside the encoder block",
+      "Output of [CLS] → MLP Head → Class Prediction",
+      "Softmax applied directly to all patch Q vectors"
+    ],
+    ans: 2,
+    diff: "easy",
+    correctFb: "Correct! Slide 12 step 5 states: 'Output of [CLS] → MLP Head → Class Prediction.' After the encoder processes all tokens, only the [CLS] token's output is passed to a separate MLP Head to produce the final classification.",
+    wrongFb: "Slide 12 step 5 is the final step: 'Output of [CLS] → MLP Head → Class Prediction.' The Add & Norm and Feed-Forward MLP are internal encoder steps. The final class prediction comes from taking [CLS]'s output after the full encoder and passing it through the MLP Head."
+  },
+  // Slide 4 (Architecture steps)
+  {
+    q: "According to the architecture steps in the slides, what happens to a patch BEFORE positional encoding is added?",
+    opts: [
+      "It is passed directly into the transformer encoder",
+      "It is first flattened and then embedded via a linear projection",
+      "It is compared to all other patches using Q · Kᵀ",
+      "It is assigned to the [CLS] token's position"
+    ],
+    ans: 1,
+    diff: "medium",
+    correctFb: "Correct! Slide 3 gives the order: (1) split into patches, (2) flatten and embed each patch, (3) add positional encoding. So before positional encoding, each patch is first flattened and embedded through a linear projection (the 'Linear Projection of Flattened Patches').",
+    wrongFb: "Slide 3 shows the order clearly: first split → then 'flatten and embed each patch' → THEN 'add positional encoding.' The patch must be converted to an embedding vector before positional information can be added to it."
+  },
+  // Slide 6 — conceptual
+  {
+    q: "Based on Slide 6, after Softmax normalizes the attention scores, these normalized scores are used to:",
+    opts: [
+      "Generate new Q, K, V vectors for the next layer",
+      "Weight the V vectors — helping gather relevant content for each patch",
+      "Directly produce the class label without using V",
+      "Update the positional encodings of each patch"
+    ],
+    ans: 1,
+    diff: "medium",
+    correctFb: "Correct! Slide 6 states: 'These scores weight the V vectors (features). Helps gather relevant content for each patch.' After Softmax, the normalized scores become attention weights that determine how much of each patch's V vector contributes to the output.",
+    wrongFb: "Slide 6 is direct: after Softmax, the normalized scores are used to 'weight the V vectors (features)' and 'helps gather relevant content for each patch.' The scores are not used to regenerate Q/K/V or to directly classify — they are routing weights for V."
   }
 ];
 
 const tfQuestions = [
+  // Slide 1
   {
-    q: "In ViT, the same weight matrices Wq, Wk, and Wv are shared across all patch positions within a single attention head.",
-    ans: true,
-    diff: "medium",
-    correctFb: "True — and this is by design. Weight sharing across positions means the model learns general pattern detectors rather than position-specific ones. This is analogous to how CNN kernels are shared across spatial positions. Different positions produce different Q/K/V vectors only because their input embeddings differ, not because they use different weight matrices.",
-    wrongFb: "This statement is actually TRUE. The projection matrices Wq, Wk, Wv are shared across all N positions (applied to each patch embedding identically). The different Q, K, V vectors arise from different input patch embeddings, not different weight matrices. This weight sharing reduces parameters and encourages the learning of position-agnostic features."
+    q: "According to the slides, ViT processes images by applying convolutional filters that slide across the image.",
+    ans: false,
+    diff: "easy",
+    correctFb: "Correct — FALSE. Slide 1 states that ViT 'splits image into patches and embeds them' and 'processes patches with self-attention mechanism.' Sliding convolutional filters are a characteristic of CNNs, not ViT.",
+    wrongFb: "FALSE. Slide 1 describes ViT as a model that 'splits image into patches and embeds them' and 'processes patches with self-attention mechanism.' Convolutional filters that slide across images are a feature of CNNs — ViT replaces this with patch-based self-attention."
   },
+  // Slide 3 / Slide 4
   {
-    q: "ViT completely eliminates all convolutional operations from the image classification pipeline.",
+    q: "According to the slides, the [CLS] token is added to the patch sequence AFTER positional encoding is applied.",
     ans: false,
     diff: "medium",
-    correctFb: "Correct — FALSE! The patch embedding step in ViT is mathematically equivalent to a non-overlapping convolution with kernel size = stride = patch size P. Some ViT implementations literally implement patch embedding using Conv2d(in_channels=3, out_channels=D, kernel_size=P, stride=P). So convolution is not eliminated — it appears in the very first step.",
-    wrongFb: "FALSE. The Linear Projection of Flattened Patches is mathematically equivalent to a single non-overlapping convolution with kernel size equal to patch size P and stride P. In PyTorch, this is typically implemented as nn.Conv2d(3, D, kernel_size=P, stride=P). While ViT removes repeated convolutional layers (like in ResNet), one 'convolution-like' operation remains in the patch embedding."
+    correctFb: "Correct — FALSE. Slide 3 step 4 says 'Feed sequence of patches into transformer encoder' and step 5 says 'Use [CLS] token's output for classification.' The architecture diagram in Slide 2 shows [CLS] as part of the input sequence that receives positional encoding — it is in the sequence at the point positional encoding is added, not after.",
+    wrongFb: "FALSE. Looking at the architecture in Slides 2 and 3, the [CLS] token is part of the patch sequence and positional encoding (Patch + Position Embedding) is shown applied to the entire sequence including [CLS]. The [CLS] is prepended and then the full sequence (including [CLS]) gets positional encodings — [CLS] is not added after positional encoding."
   },
+  // Slide 5
   {
-    q: "The attention weights produced by Softmax in a self-attention head always sum to 1 across all query positions simultaneously.",
+    q: "According to the slides, V (Value) is defined as 'the actual content/features to be passed if attended.'",
+    ans: true,
+    diff: "easy",
+    correctFb: "Correct — TRUE. Slide 5 gives this exact definition: 'V: Actual content/features to be passed if attended.' This distinguishes V from Q (what the patch is querying for) and K (what each patch offers to be queried against).",
+    wrongFb: "TRUE. Slide 5 gives exact definitions, and V is defined word-for-word as: 'Actual content/features to be passed if attended.' This is directly stated in the slide."
+  },
+  // Slide 5
+  {
+    q: "According to the slides, each patch uses different weight matrices (Wq, Wk, Wv) specific to its position in the image.",
     ans: false,
     diff: "hard",
-    correctFb: "Correct — FALSE. The Softmax is applied independently for each query token, normalizing across the key dimension (all N patches). For a given query token i, the weights [aᵢ₁, aᵢ₂, ..., aᵢN] sum to 1. But if you sum ALL weights in the N×N attention matrix, the sum equals N (each of the N rows sums to 1). The statement implies global normalization, which is incorrect.",
-    wrongFb: "FALSE — and this is a subtle but important distinction. Softmax is applied row-wise to the N×N attention score matrix. Each row (corresponding to one query token) produces weights summing to 1. But the ENTIRE N×N matrix sums to N, not 1. The statement would be true if it said 'for each query, the attention weights over all keys sum to 1' — but 'across all query positions simultaneously' implies global normalization, which is wrong."
+    correctFb: "Correct — FALSE. Slide 5 explicitly states: 'Each via learned Wq, Wk, Wv (shared for all patches).' All patches use the same three projection matrices. Different Q, K, V vectors arise from different patch embeddings as input, not from different weight matrices.",
+    wrongFb: "FALSE. Slide 5 is explicit on this point: 'Each via learned Wq, Wk, Wv (shared for all patches).' The weight matrices are shared — every patch uses the same Wq, Wk, Wv. Different patches produce different Q/K/V vectors only because their input embeddings are different."
   },
+  // Slide 8
   {
-    q: "In ViT, positional encodings are added to patch embeddings BEFORE feeding them into the Transformer Encoder.",
+    q: "According to the example in Slide 8, the raw attention scores [S1, S2, S3, S4] are computed by Q1 dotted with each patch's Query vector.",
+    ans: false,
+    diff: "hard",
+    correctFb: "Correct — FALSE. Slide 8 states: 'We compute the dot product between Q₁ (Query of Patch 1) and every other patch's Key.' The scores are Q1·K1, Q1·K2, Q1·K3, Q1·K4 — Query dotted with KEY vectors, not Query dotted with Query vectors.",
+    wrongFb: "FALSE. Slide 8 is very specific: scores are computed as 'the dot product between Q₁ (Query of Patch 1) and every other patch's Key.' So S1=Q1·K1, S2=Q1·K2, S3=Q1·K3, S4=Q1·K4. The Query of Patch 1 (Q1) is dotted against KEY vectors (K), not against other Query vectors."
+  },
+  // Slide 9
+  {
+    q: "According to Slide 9, the final output representation of Patch 1 is a weighted sum of all four Value vectors (V1, V2, V3, V4).",
     ans: true,
     diff: "easy",
-    correctFb: "True! The pipeline is: flatten patch → linear project → add positional encoding → feed to encoder. Positional information must be embedded in the tokens before attention, because the attention mechanism itself is permutation-invariant — it has no inherent sense of order or position.",
-    wrongFb: "This is TRUE. The order is: (1) split image into patches, (2) flatten and linearly project each patch, (3) add positional encoding to each projected patch, (4) prepend [CLS] token, (5) feed entire sequence to Transformer Encoder. Positional information is incorporated before any attention computation occurs."
+    correctFb: "Correct — TRUE. Slide 9 states the exact formula: 'Output1 = S1·V1 + S2·V2 + S3·V3 + S4·V4 (Weighted sum of all 4 V vectors).' The normalized scores S1–S4 weight each value vector.",
+    wrongFb: "TRUE. Slide 9 gives the explicit formula: Output1 = S1·V1 + S2·V2 + S3·V3 + S4·V4, and labels it '(Weighted sum of all 4 V vectors).' This is stated directly in the slide."
   },
+  // Slide 10
   {
-    q: "Multi-Head Attention with H=8 heads always performs better than single-head attention (H=1) on image classification tasks.",
+    q: "According to Slide 10, Q and K (Query and Key) contain the actual content/features of each patch.",
     ans: false,
     diff: "medium",
-    correctFb: "Correct — FALSE. More heads is not universally better. Single-head attention can sometimes match or outperform multi-head in specific tasks. Multi-head attention allows the model to attend to information from different representation subspaces simultaneously — which empirically helps for complex tasks. But the benefit is task-dependent and multi-head attention introduces more complexity. H is a hyperparameter tuned per task.",
-    wrongFb: "FALSE. More heads is not always better — it is a hyperparameter choice. Multi-head attention's benefit is that different heads can specialize in different types of relationships (spatial proximity, semantic similarity, etc.). However, with small datasets or simple tasks, additional heads may not improve performance and may even hurt generalization due to increased model capacity."
+    correctFb: "Correct — FALSE. Slide 10 clarifies the roles: 'V contains the actual content/features (not just where to look like Q/K).' Q and K are used for the 'where to look' — determining relevance and routing. V contains the actual content that gets aggregated.",
+    wrongFb: "FALSE. Slide 10 explicitly corrects this: 'V contains the actual content/features (not just where to look like Q/K).' Q and K serve the 'where to look' function — they compute similarity scores to determine which patches are relevant. V is the content payload that actually flows to the output."
   },
+  // Slide 11
   {
-    q: "The [CLS] token in ViT is initialized as a fixed, pre-defined embedding (e.g., all zeros) and is not updated during training.",
-    ans: false,
-    diff: "medium",
-    correctFb: "Correct — FALSE. The [CLS] token is a learnable parameter — it is initialized randomly (or as zeros in some implementations) but IS updated through backpropagation during training. It is treated exactly like a model weight. By the end of training, its initial value has been optimized to best facilitate information aggregation from all patches.",
-    wrongFb: "FALSE. The [CLS] token embedding is a learnable parameter of the model — it is updated during backpropagation along with all other parameters (Wq, Wk, Wv, MLP weights, etc.). While it may be initialized to zeros, it diverges from zero during training. Treating it as fixed would prevent the model from learning an optimal 'query' state for aggregating patch information."
-  },
-  {
-    q: "In scaled dot-product attention, the division by √d_k is applied AFTER the Softmax operation.",
-    ans: false,
-    diff: "easy",
-    correctFb: "Correct — FALSE. The formula is Softmax(QKᵀ / √d_k)·V. Division by √d_k occurs BEFORE Softmax. This is crucial: the goal is to scale the raw dot products to prevent softmax saturation. Dividing after softmax would have no effect on gradient flow, since softmax already maps to (0,1).",
-    wrongFb: "FALSE. The correct order is: compute QKᵀ, then divide by √d_k, then apply Softmax. The division must come BEFORE Softmax because the purpose is to control the magnitude of inputs to Softmax. If you applied division after Softmax, you would distort the probability distribution (values would no longer sum to 1) and lose the gradient-stability benefit entirely."
-  },
-  {
-    q: "ViT requires significantly more training data than CNNs to achieve comparable performance, because it lacks inductive biases about spatial structure.",
+    q: "According to the slides, the [CLS] token's final output is used for classification because it aggregates global image information through attention.",
     ans: true,
     diff: "easy",
-    correctFb: "True! This is one of the central findings of the original ViT paper (Dosovitskiy et al., 2020). CNNs have strong inductive biases: local receptive fields, translation equivariance, and weight sharing across positions. These biases encode useful prior knowledge about images. ViT must learn all of these from raw data, requiring much larger datasets like ImageNet-21k or JFT-300M to reach competitive accuracy.",
-    wrongFb: "This is TRUE and it is one of ViT's fundamental characteristics documented in the original paper. The authors explicitly noted that ViT underperforms ResNets when trained only on ImageNet (1.3M images) but exceeds them when pre-trained on JFT-300M (300M images). The lack of inductive biases means ViT needs to 'discover' spatial structure from data rather than having it built in."
+    correctFb: "Correct — TRUE. Slide 11 states all of: (1) '[CLS] learns to aggregate global image information,' (2) 'Its final output is used for classification,' and (3) 'Has its own Q, K, V and attends to all patches' — which is the mechanism by which it aggregates global information.",
+    wrongFb: "TRUE. Slide 11 states both facts explicitly: '[CLS] learns to aggregate global image information' and 'Its final output is used for classification.' The mechanism is that [CLS] 'has its own Q, K, V and attends to all patches' — allowing it to gather information from the entire image."
   },
+  // Slide 12
   {
-    q: "The output sequence length of the Transformer Encoder in ViT is shorter than the input sequence length due to the aggregation performed by attention.",
+    q: "According to Slide 12, the Add & Norm step appears only once in each Transformer Encoder block — after the Feed-Forward MLP.",
     ans: false,
     diff: "medium",
-    correctFb: "Correct — FALSE. The Transformer Encoder is sequence-preserving: input length = output length. For 197 input tokens (196 patches + [CLS]), the output is also 197 tokens. Attention produces a weighted average of V vectors but does not reduce the number of tokens. Sequence compression would require pooling or strided operations, which are not part of the standard Transformer Encoder.",
-    wrongFb: "FALSE. This is a common misconception. Attention aggregates INFORMATION within each token's representation (by mixing V vectors), but it does not change the number of tokens. If you input 197 tokens, you get 197 tokens out — each with an updated representation that incorporates information from all other tokens. Length reduction would require separate pooling layers not present in the standard Transformer Encoder."
+    correctFb: "Correct — FALSE. Slide 12 lists: (1) Multi-Head Attention Layer, (2) Add & Norm, (3) Feed-Forward MLP, (4) Add & Norm again. Add & Norm appears TWICE per encoder block — once after multi-head attention and once after the Feed-Forward MLP.",
+    wrongFb: "FALSE. Slide 12 explicitly lists steps 1–4: (1) Multi-Head Attention Layer, (2) Add & Norm, (3) Feed-Forward MLP, (4) Add & Norm again. The word 'again' in step 4 makes clear that Add & Norm occurs twice — once after attention and once after MLP."
   },
+  // Slide 2 / Architecture
   {
-    q: "In ViT, the MLP head used for final classification contains the same multi-head attention layers as the Transformer Encoder blocks.",
+    q: "According to the architecture diagram in the slides, the Transformer Encoder receives the raw image pixels directly as input.",
     ans: false,
     diff: "easy",
-    correctFb: "Correct — FALSE. The MLP classification head is a separate, simple module after the Transformer Encoder stack. It consists of one or two standard linear (fully connected) layers — no attention at all. The Transformer Encoder layers (with attention) process all 197 tokens. Then only the [CLS] output is passed to this simple MLP head for class prediction.",
-    wrongFb: "FALSE. The MLP head is completely separate from the Transformer Encoder. It is a simple 1-2 layer feedforward network (Linear → GELU → Linear → Softmax) that takes only the [CLS] token's final representation as input. It contains no attention layers. The attention operations are entirely confined to the Transformer Encoder blocks that precede the classification head."
+    correctFb: "Correct — FALSE. The architecture in Slide 2 shows: image → patches → 'Linear Projection of Flattened Patches' → patch + position embeddings → Transformer Encoder. The encoder receives embedded patch vectors with positional encoding, not raw pixels.",
+    wrongFb: "FALSE. Slide 2's architecture diagram clearly shows the pipeline: the image is first split into patches, then passed through 'Linear Projection of Flattened Patches,' then positional embeddings are added, and THEN the sequence enters the Transformer Encoder. Raw pixels never directly enter the encoder."
   }
 ];
 
-// Combine and render
-const allQuestions = [];
-mcqQuestions.forEach((q,i) => allQuestions.push({...q, type:'mcq', globalIdx: i}));
-tfQuestions.forEach((q,i) => allQuestions.push({...q, type:'tf', globalIdx: i+20}));
-
-let answered = 0, correct = 0, wrong = 0;
-const userAnswers = {};
-
-function renderExam() {
-  const body = document.getElementById('exam-body');
-  let html = '';
-
-  html += `<div class="section-heading">Part I — Multiple Choice Questions <span class="q-count">20 questions · choose the best answer</span></div>`;
-  
-  mcqQuestions.forEach((q, i) => {
-    html += buildMCQ(q, i);
-  });
-
-  html += `<div class="section-heading">Part II — True / False Questions <span class="q-count">10 questions · circle T or F</span></div>`;
-  
-  tfQuestions.forEach((q, i) => {
-    html += buildTF(q, i+20);
-  });
-
-  html += `
-    <div class="submit-area">
-      <button class="submit-btn" onclick="submitExam()">Submit Examination</button>
-      <div class="score-banner" id="score-banner">
-        <div class="score-grade" id="score-grade"></div>
-        <div class="score-details" id="score-details"></div>
-        <div class="score-msg" id="score-msg"></div>
-      </div>
-    </div>
-  `;
-
-  body.innerHTML = html;
-}
-
-function buildMCQ(q, idx) {
-  const badgeClass = q.diff === 'easy' ? 'badge-easy' : q.diff === 'medium' ? 'badge-medium' : 'badge-hard';
-  let opts = q.opts.map((o, oi) => `
-    <button class="option-btn" id="opt-${idx}-${oi}" onclick="answerMCQ(${idx}, ${oi})" aria-label="Option ${String.fromCharCode(65+oi)}">
-      <span class="opt-label">${String.fromCharCode(65+oi)}.</span>
-      <span>${o}</span>
-    </button>
-  `).join('');
-  return `
-    <div class="q-card" id="qcard-${idx}">
-      <div class="q-top">
-        <span class="q-num">${idx+1}.</span>
-        <span class="q-text">${q.q}</span>
-        <span class="difficulty-badge ${badgeClass}">${q.diff}</span>
-      </div>
-      <div class="options">${opts}</div>
-      <div class="feedback" id="fb-${idx}">
-        <span class="feedback-icon" id="fb-icon-${idx}"></span>
-        <span id="fb-text-${idx}"></span>
-      </div>
-    </div>
-  `;
-}
-
-function buildTF(q, idx) {
-  const badgeClass = q.diff === 'easy' ? 'badge-easy' : q.diff === 'medium' ? 'badge-medium' : 'badge-hard';
-  return `
-    <div class="q-card" id="qcard-${idx}">
-      <div class="q-top">
-        <span class="q-num">${idx+1}.</span>
-        <span class="q-text">${q.q}</span>
-        <span class="difficulty-badge ${badgeClass}">${q.diff}</span>
-      </div>
-      <div class="tf-row">
-        <button class="tf-btn" id="tf-${idx}-T" onclick="answerTF(${idx}, true)">TRUE</button>
-        <button class="tf-btn" id="tf-${idx}-F" onclick="answerTF(${idx}, false)">FALSE</button>
-      </div>
-      <div class="feedback" id="fb-${idx}">
-        <span class="feedback-icon" id="fb-icon-${idx}"></span>
-        <span id="fb-text-${idx}"></span>
-      </div>
-    </div>
-  `;
-}
-
-function answerMCQ(idx, chosen) {
-  if (userAnswers[idx] !== undefined) return;
-  const q = mcqQuestions[idx];
-  userAnswers[idx] = chosen;
-  const isCorrect = chosen === q.ans;
-  updateStats(isCorrect);
-
-  for (let i = 0; i < q.opts.length; i++) {
-    const btn = document.getElementById(`opt-${idx}-${i}`);
-    btn.disabled = true;
-    if (i === q.ans) btn.classList.add('correct');
-    else if (i === chosen && !isCorrect) btn.classList.add('wrong');
-    else btn.classList.add('dimmed');
-  }
-
-  showFeedback(idx, isCorrect, isCorrect ? q.correctFb : q.wrongFb);
-  const card = document.getElementById(`qcard-${idx}`);
-  card.classList.remove('unanswered-highlight');
-  card.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
-}
-
-function answerTF(idx, chosen) {
-  const qIdx = idx;
-  if (userAnswers[qIdx] !== undefined) return;
-  const q = tfQuestions[idx - 20];
-  userAnswers[qIdx] = chosen;
-  const isCorrect = chosen === q.ans;
-  updateStats(isCorrect);
-
-  const tBtn = document.getElementById(`tf-${qIdx}-T`);
-  const fBtn = document.getElementById(`tf-${qIdx}-F`);
-  tBtn.disabled = true;
-  fBtn.disabled = true;
-
-  if (q.ans === true) {
-    tBtn.classList.add('correct');
-    if (!isCorrect) fBtn.classList.add('wrong');
-    else fBtn.classList.add('dimmed');
-  } else {
-    fBtn.classList.add('correct');
-    if (!isCorrect) tBtn.classList.add('wrong');
-    else tBtn.classList.add('dimmed');
-  }
-
-  showFeedback(qIdx, isCorrect, isCorrect ? q.correctFb : q.wrongFb);
-  const card = document.getElementById(`qcard-${qIdx}`);
-  card.classList.remove('unanswered-highlight');
-  card.classList.add(isCorrect ? 'answered-correct' : 'answered-wrong');
-}
-
-function showFeedback(idx, isCorrect, text) {
-  const fb = document.getElementById(`fb-${idx}`);
-  const icon = document.getElementById(`fb-icon-${idx}`);
-  const txt = document.getElementById(`fb-text-${idx}`);
-  fb.className = `feedback show ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
-  icon.textContent = isCorrect ? '✓ CORRECT' : '✗ INCORRECT';
-  txt.textContent = text;
-}
-
-function updateStats(isCorrect) {
-  answered++;
-  if (isCorrect) correct++;
-  else wrong++;
-  document.getElementById('stat-answered').textContent = answered;
-  document.getElementById('stat-correct').textContent = correct;
-  document.getElementById('stat-wrong').textContent = wrong;
-  document.getElementById('exam-prog').style.width = (answered/30*100) + '%';
-}
-
-function submitExam() {
-  let firstUnanswered = null;
-  // Highlight unanswered MCQ
-  mcqQuestions.forEach((q, i) => {
-    if (userAnswers[i] === undefined) {
-      const card = document.getElementById(`qcard-${i}`);
-      card.classList.add('unanswered-highlight');
-      if (!firstUnanswered) firstUnanswered = card;
-    }
-  });
-  // Highlight unanswered TF
-  tfQuestions.forEach((q, i) => {
-    const idx = i + 20;
-    if (userAnswers[idx] === undefined) {
-      const card = document.getElementById(`qcard-${idx}`);
-      card.classList.add('unanswered-highlight');
-      if (!firstUnanswered) firstUnanswered = card;
-    }
-  });
-
-  if (firstUnanswered) {
-    firstUnanswered.scrollIntoView({behavior: 'smooth', block: 'center'});
-  }
-
-  const total = 30;
-  const pct = Math.round(correct / total * 100);
-  let grade, msg;
-  if (pct >= 90) { grade = 'A'; msg = 'Outstanding. Excellent command of Vision Transformer concepts.'; }
-  else if (pct >= 80) { grade = 'B'; msg = 'Good performance. Review the challenging attention mechanics.'; }
-  else if (pct >= 70) { grade = 'C'; msg = 'Satisfactory. Focus on Q/K/V computation and architecture details.'; }
-  else if (pct >= 60) { grade = 'D'; msg = 'Passing. Significant review recommended before the exam.'; }
-  else { grade = 'F'; msg = 'Needs substantial improvement. Re-study the full ViT chapter.'; }
-
-  document.getElementById('score-grade').textContent = `${correct} / ${total} — ${grade} (${pct}%)`;
-  document.getElementById('score-details').textContent = `Correct: ${correct}  |  Wrong: ${wrong}  |  Unanswered: ${total - answered}`;
-  document.getElementById('score-msg').textContent = msg;
-  const banner = document.getElementById('score-banner');
-  banner.classList.add('show');
-  banner.scrollIntoView({behavior: 'smooth', block: 'center'});
-}
-
-// ===== FLASHCARD DATA =====
+// ============ FLASHCARDS (strictly from slides) ============
 const flashcards = [
   {
-    cat: "Architecture",
-    q: "What are the 5 main stages of the ViT pipeline, in order?",
-    a: "1) Split image into patches (e.g. 16×16)\n2) Flatten + Linear Project each patch → embedding\n3) Prepend [CLS] token, add Positional Encodings\n4) Feed 197-token sequence through L Transformer Encoder layers\n5) Take [CLS] output → MLP Head → class prediction"
+    cat: "Slide 1 — What is ViT",
+    q: "What are the 4 key characteristics of ViT listed in the slides?",
+    a: "1. Applies transformer architecture to image classification\n2. Splits image into patches and embeds them\n3. Adds positional information to retain spatial layout\n4. Processes patches with self-attention mechanism"
   },
   {
-    cat: "Architecture",
-    q: "What is the Transformer Encoder block structure in ViT?",
-    a: "Each block (repeated L times):\n  Norm → Multi-Head Self-Attention → Add (residual)\n  Norm → MLP (2-layer FF) → Add (residual)\n\nKey: Pre-LayerNorm design for training stability. Residual connections prevent vanishing gradients."
+    cat: "Slide 3 & 4 — ViT Steps",
+    q: "What are the 5 steps of the ViT architecture pipeline (from the slides)?",
+    a: "1. Split image into patches (e.g., 16×16)\n2. Flatten and embed each patch\n3. Add positional encoding\n4. Feed sequence of patches into transformer encoder\n5. Use [CLS] token's output for classification"
   },
   {
-    cat: "Patch Embedding",
-    q: "How many patches does a 224×224 image produce with patch size 16×16? What is each patch's raw vector size?",
-    a: "Number of patches: (224÷16)² = 14² = 196 patches\n\nRaw patch vector: 16 × 16 × 3 = 768 elements (flattened RGB)\n\nAfter Linear Projection: D-dimensional embedding (e.g. D=768 for ViT-Base)"
+    cat: "Slide 5 — Q, K, V",
+    q: "What are the definitions of Q, K, and V as given in the slides?",
+    a: "Q (Query): What the patch is querying for\nK (Key): What each patch offers to be queried against\nV (Value): Actual content/features to be passed if attended"
   },
   {
-    cat: "Patch Embedding",
-    q: "Is the patch embedding step in ViT truly 'convolution-free'?",
-    a: "No — it is mathematically equivalent to a single non-overlapping convolution:\nConv2d(in=3, out=D, kernel_size=P, stride=P)\n\nViT removes the REPEATED convolutional layers of CNNs, but the patch projection is functionally a strided convolution applied once."
+    cat: "Slide 5 — Q, K, V",
+    q: "How are Q, K, V generated from patch vectors according to the slides?",
+    a: "Each patch vector is passed into 3 separate learnable linear layers.\nGenerated using linear projections: Wq, Wk, Wv.\nImportant: Wq, Wk, Wv are SHARED for all patches (same weights used for every patch)."
   },
   {
-    cat: "Attention — Q/K/V",
-    q: "What do Q, K, and V represent, and how are they computed?",
-    a: "Q (Query): 'What am I looking for?'\nK (Key): 'What do I have to offer?'\nV (Value): 'The actual content I provide'\n\nGenerated by: Q = X·Wq,  K = X·Wk,  V = X·Wv\n\nWq, Wk, Wv are learned weight matrices, shared across all positions."
+    cat: "Slide 6 — Attention Scores",
+    q: "According to the slides, what is the role of each step in the attention computation?",
+    a: "Q · Kᵀ → gives similarity (attention) scores\nSoftmax → normalizes scores across patches\nScores × V → weights the V vectors (features)\nResult → helps gather relevant content for each patch"
   },
   {
-    cat: "Attention — Formula",
-    q: "Write the full Scaled Dot-Product Attention formula and explain each term.",
-    a: "Attention(Q, K, V) = Softmax( Q·Kᵀ / √d_k ) · V\n\n• Q·Kᵀ: similarity scores (N×N matrix)\n• ÷√d_k: scaling to prevent softmax saturation\n• Softmax: normalize to probability distribution per row\n• ·V: weighted aggregation of value vectors"
+    cat: "Slide 7 — Example Setup",
+    q: "What are the 4 patches in the example from the slides and what does each represent?",
+    a: "Patch 1: Cat Head\nPatch 2: Cat Body\nPatch 3: Rug\nPatch 4: Wall\n\nEach is embedded and transformed into Q, K, V."
   },
   {
-    cat: "Attention — Formula",
-    q: "Why divide by √d_k in the attention formula? What problem does it solve?",
-    a: "When d_k is large, Q·K dot products grow in variance (~d_k), pushing softmax inputs to extreme values.\n\nResult without scaling: softmax saturates → one patch gets ≈1, others ≈0 → near-zero gradients → vanishing gradient problem.\n\nDividing by √d_k restores variance ≈ 1, keeping softmax in a gradient-friendly regime."
+    cat: "Slide 8 — Step 1 & 2",
+    q: "In Step 1 of the slides example, how are Q, K, V assigned to each patch?",
+    a: "Patch 1 → Q1, K1, V1\nPatch 2 → Q2, K2, V2\nPatch 3 → Q3, K3, V3\nPatch 4 → Q4, K4, V4\n\nEach generated via the same learned Wq, Wk, Wv (shared for all patches)."
   },
   {
-    cat: "Attention — Multi-Head",
-    q: "What is Multi-Head Attention and what is the dimension per head?",
-    a: "Run H attention heads in parallel, each in a subspace:\n  d_k = d_v = D / H\n\nEach head independently computes Attention(XWqᵢ, XWkᵢ, XWvᵢ)\n\nOutputs concatenated: Concat(head₁,...,headₕ) → shape (N, D)\nThen projected: × Wₒ ∈ ℝ^(D×D)\n\nBenefit: each head specializes in different relationship types."
+    cat: "Slide 8 — Step 2",
+    q: "How are attention scores computed for Patch 1 as Query (Step 2 in the slides)?",
+    a: "Dot product of Q1 with every patch's Key:\nQ1·K1 — self-similarity\nQ1·K2 — how much Patch 1 attends to Patch 2\nQ1·K3\nQ1·K4\n\nResults: Raw scores [S1, S2, S3, S4]\nThen: Apply Softmax to normalize scores"
   },
   {
-    cat: "[CLS] Token",
-    q: "What is the [CLS] token? Why is only its output used for classification?",
-    a: "A learnable extra token prepended to the patch sequence.\n• Not from the image — purely functional\n• Through L attention layers, it attends to ALL 196 patches\n• Its final hidden state aggregates global image context\n• This single D-dim vector → MLP Head → class logits\n\nAlternative: mean pooling of all patch outputs also works but [CLS] is standard ViT."
+    cat: "Slide 9 — Step 3",
+    q: "What is the formula for the final output of Patch 1 using attention on V (Step 3 from the slides)?",
+    a: "Output1 = S1·V1 + S2·V2 + S3·V3 + S4·V4\n\nThis is a weighted sum of all 4 V vectors.\nWeights S1–S4 come from the Softmax-normalized attention scores.\nThen: Repeat for all patches."
   },
   {
-    cat: "Positional Encoding",
-    q: "Why is positional encoding necessary in ViT, and what type does ViT use?",
-    a: "Self-attention is permutation-invariant: shuffling tokens gives shuffled-but-identical outputs. Without position info, patch (0,0) and patch (10,5) are indistinguishable.\n\nViT uses: learned 1D positional embeddings\n• One learnable vector per position (0 to N)\n• Added element-wise to patch embeddings\n• Updated during training end-to-end"
+    cat: "Slide 10 — Why V",
+    q: "According to Slide 10, why do we multiply by V after computing attention scores?",
+    a: "Because V contains the actual content/features — not just 'where to look' like Q/K.\n\nOnce attention decides which patches are relevant, we gather and summarize their information using their V vectors.\n\nQ/K = routing (where to look)\nV = the payload (what to take)"
   },
   {
-    cat: "Complexity",
-    q: "What is the computational complexity of self-attention in ViT? Why does patch size matter?",
-    a: "Complexity: O(N²·D) where N = number of patches\n\nN²: every patch pair computes a dot product → N×N score matrix\n\nPatch size P↑ → N = (H/P)² ↓ → attention faster\nPatch size P↓ → N ↑ → more detail but quadratic cost\n\nThis N² scaling is why ViT uses large patches (16×16 or 32×32) and why Swin Transformer uses local windows to achieve O(N)."
+    cat: "Slide 11 — [CLS] Token",
+    q: "What are the 4 properties of the [CLS] token listed in the slides?",
+    a: "1. Special token added to the patch sequence\n2. Learns to aggregate global image information\n3. Its final output is used for classification\n4. Has its own Q, K, V and attends to all patches"
   },
   {
-    cat: "Architecture",
-    q: "Compare ViT's inductive biases vs CNNs. Why does ViT need more data?",
-    a: "CNN inductive biases (built-in):\n• Local connectivity (nearby pixels matter more)\n• Translation equivariance (feature at position A = feature at B)\n• Weight sharing across spatial positions\n\nViT has NONE of these — it must learn all spatial structure from data.\n\nResult: ViT underperforms on <1M images; excels when pre-trained on 14M–300M images."
+    cat: "Slide 12 — Final Steps",
+    q: "What are the 5 final steps listed in Slide 12 for the Transformer Encoder and classification?",
+    a: "1. Multi-Head Attention Layer\n2. Add & Norm\n3. Feed-Forward MLP\n4. Add & Norm again\n5. Output of [CLS] → MLP Head → Class Prediction"
   },
   {
-    cat: "Components",
-    q: "What is Layer Normalization in ViT, and why is Pre-LN preferred over Post-LN?",
-    a: "LayerNorm: normalizes each token's D-dim vector to zero mean, unit variance (learnable scale/shift)\n\nPost-LN (original Transformer): applied after sub-layer + residual → unstable gradients at init\n\nPre-LN (modern ViT): applied BEFORE sub-layer → stable gradients from the start → allows larger LR, no warm-up needed, more robust training"
+    cat: "Slide 2 — Architecture",
+    q: "According to the architecture diagram, what are the two main components shown in the ViT architecture?",
+    a: "1. Vision Transformer (ViT) — left side:\n   Image → patches → Linear Projection of Flattened Patches → Patch+Position Embedding (with [CLS]) → Transformer Encoder → MLP Head → Class\n\n2. Transformer Encoder — right side (zoomed in):\n   Embedded Patches → Norm → Multi-Head Attention → (+) → Norm → MLP → (+) → output (repeated L times)"
   },
   {
-    cat: "Components",
-    q: "What is the Residual (Skip) Connection and what problem does it solve?",
-    a: "Formula: output = x + Sublayer(LayerNorm(x))\n\nProblem solved: In deep networks, backpropagation multiplies Jacobians through L layers → gradients can shrink exponentially (vanishing gradients)\n\nResidual solution: gradient flows directly through x → guaranteed gradient ≥ 1 regardless of sublayer behavior → stable training with 12–24 layers"
+    cat: "Slide 1 — What is ViT",
+    q: "Why does ViT add positional information to patch embeddings?",
+    a: "To retain the spatial layout of the image.\n\nSelf-attention treats all patches as a set (has no inherent sense of order or position). Without positional encoding, the model cannot distinguish which region of the image each patch came from."
   },
   {
-    cat: "Architecture",
-    q: "What is the shape of the input and output of the Transformer Encoder in ViT?",
-    a: "Both input and output: (N+1) × D = 197 × D\nwhere N=196 patches, +1 for [CLS], D=model dimension\n\nThe encoder is sequence-preserving: length and dimension are unchanged through all L layers.\n\nOnly at the END do we select position 0 ([CLS]) → shape (1×D) → MLP Head"
+    cat: "Slide 5 — Q, K, V",
+    q: "What is the difference between K (Key) and V (Value) in ViT attention?",
+    a: "K (Key): 'What each patch offers to be queried against' — used for the matching/routing step (Q·Kᵀ to compute who is relevant)\n\nV (Value): 'Actual content/features to be passed if attended' — the information payload that gets aggregated once relevance is determined\n\nK determines IF a patch is attended to; V is WHAT is taken from that patch."
   },
   {
-    cat: "Attention — Q/K/V",
-    q: "Walk through the self-attention output computation for a single query patch.",
-    a: "For Patch i as query:\n1. Compute scores: Sᵢⱼ = Qᵢ · Kⱼ  for all j=1..N\n2. Scale: Sᵢⱼ / √d_k\n3. Normalize: aᵢⱼ = Softmax({Sᵢⱼ}) → Σⱼ aᵢⱼ = 1\n4. Aggregate: Outputᵢ = Σⱼ aᵢⱼ · Vⱼ\n\nRepeat for ALL N patches (and [CLS]) — done in parallel via matrix ops."
+    cat: "Slide 6 — Attention Scores",
+    q: "What does Softmax do to the raw attention scores in ViT?",
+    a: "Softmax normalizes the scores across patches.\n\nRaw Q·Kᵀ scores are unbounded real numbers.\nSoftmax converts them into a distribution where all values are in (0,1) and sum to 1.\n\nThese normalized values are then used as weights to combine the V vectors."
   },
   {
-    cat: "Patch Embedding",
-    q: "What is the total input sequence length to ViT-Base for a 224×224 image?",
-    a: "Patch tokens: (224/16)² = 196\nPlus [CLS] token: +1\nTotal: 197 tokens\n\nEach token: 768-dimensional embedding (D=768 for ViT-Base)\n\nFull input tensor shape: 197 × 768"
+    cat: "Slide 8 — Step 2",
+    q: "In the slide example, what 4 dot products are computed when Patch 1 is the Query?",
+    a: "Q1·K1 — self-similarity of Patch 1 (Cat Head with itself)\nQ1·K2 — Patch 1 attending to Patch 2 (Cat Body)\nQ1·K3 — Patch 1 attending to Patch 3 (Rug)\nQ1·K4 — Patch 1 attending to Patch 4 (Wall)\n\nNote: always Q1 dotted with Keys (K), not Queries (Q)."
   },
   {
-    cat: "Components",
-    q: "What does the MLP (Feed-Forward) block inside the Transformer Encoder do, and how does it differ from attention?",
-    a: "Attention: cross-token communication — mixes info ACROSS all patches\nMLP: per-token processing — transforms each token INDEPENDENTLY\n\nMLP structure: Linear(D → 4D) → GELU → Linear(4D → D)\n\nThe factor-4 expansion and nonlinearity allows complex feature transformations within each token's representation without inter-token mixing."
+    cat: "Slide 11 — [CLS] Token",
+    q: "How does the [CLS] token aggregate global image information?",
+    a: "The [CLS] token has its own Q, K, V and attends to ALL patches through the self-attention mechanism.\n\nIn each encoder layer, [CLS] computes attention weights over every patch and gathers a weighted combination of their V vectors.\n\nAfter L encoder layers, [CLS]'s output captures global image information and is used for classification."
   },
   {
-    cat: "Architecture",
-    q: "List three key differences between ViT and a CNN (ResNet) for image classification.",
-    a: "1) Global vs Local: ViT attends to all patches in every layer; CNN sees local receptive fields that grow gradually\n\n2) Inductive bias: CNN has translation equivariance, local connectivity; ViT has none — learns from data\n\n3) Data requirements: ViT needs large-scale pre-training (>14M images); ResNet works well on ImageNet alone\n\n4) Complexity: ViT = O(N²); CNN = O(N) — ViT is more expensive at high resolution"
+    cat: "Slide 12 — Final Steps",
+    q: "How many times does 'Add & Norm' appear in one Transformer Encoder block according to the slides?",
+    a: "Twice.\n\nStep 2: Add & Norm — after Multi-Head Attention Layer\nStep 4: Add & Norm again — after Feed-Forward MLP\n\nThe word 'again' in step 4 confirms it appears in both positions."
   },
   {
-    cat: "Attention — Formula",
-    q: "What does the N×N attention matrix represent, and what does each entry aᵢⱼ mean?",
-    a: "The N×N matrix (after Softmax) is the attention weight matrix.\n\naᵢⱼ = how much token i attends to token j\n• Row i sums to 1 (probability distribution for query i)\n• High aᵢⱼ: token i will incorporate a large fraction of Vⱼ\n• Low aᵢⱼ ≈ 0: token j contributes little to token i's output\n\nExample: [CLS] row shows which patches are most globally relevant for classification."
+    cat: "Slide 9 — Step 3",
+    q: "What does the weighted sum Output1 = S1·V1 + S2·V2 + S3·V3 + S4·V4 represent?",
+    a: "It is the new representation of Patch 1 (Cat Head) after attending to all other patches.\n\nS1–S4 are the Softmax-normalized attention weights — high for relevant patches, low for irrelevant ones.\nV1–V4 are the Value vectors (actual content) of each patch.\n\nThe result is a context-aware representation of Patch 1 that incorporates information from all patches, weighted by their relevance."
   }
 ];
 
-const categories = [...new Set(flashcards.map(f => f.cat))];
-let activeFilter = 'All';
-let filteredCards = [...flashcards];
-let currentCard = 0;
-let isFlipped = false;
-let flippedCount = 0;
+// ======= ENGINE =======
+let answered=0,correct=0,wrong=0;
+const userAnswers={};
 
-function renderFilters() {
-  const bar = document.getElementById('filter-bar');
-  let html = `<button class="filter-btn active" onclick="setFilter('All')">All (${flashcards.length})</button>`;
-  categories.forEach(cat => {
-    const count = flashcards.filter(f => f.cat === cat).length;
-    html += `<button class="filter-btn" onclick="setFilter('${cat}')">${cat} (${count})</button>`;
-  });
-  bar.innerHTML = html;
+function renderExam(){
+  const body=document.getElementById('exam-body');
+  let html='';
+  html+=`<div class="section-heading">Part I — Multiple Choice Questions <span class="q-count">20 questions · choose the best answer</span></div>`;
+  mcqQuestions.forEach((q,i)=>{ html+=buildMCQ(q,i); });
+  html+=`<div class="section-heading">Part II — True / False Questions <span class="q-count">10 questions · circle T or F</span></div>`;
+  tfQuestions.forEach((q,i)=>{ html+=buildTF(q,i+20); });
+  html+=`<div class="submit-area"><button class="submit-btn" onclick="submitExam()">Submit Examination</button><div class="score-banner" id="score-banner"><div class="score-grade" id="score-grade"></div><div class="score-details" id="score-details"></div><div class="score-msg" id="score-msg"></div></div></div>`;
+  body.innerHTML=html;
 }
 
-function setFilter(cat) {
-  activeFilter = cat;
-  filteredCards = cat === 'All' ? [...flashcards] : flashcards.filter(f => f.cat === cat);
-  currentCard = 0;
-  isFlipped = false;
-  document.getElementById('flash-card').classList.remove('flipped');
-  document.getElementById('flip-count').textContent = 'Not flipped yet';
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent.startsWith(cat));
-  });
-  renderCard();
+function buildMCQ(q,idx){
+  const bc=q.diff==='easy'?'badge-easy':q.diff==='medium'?'badge-medium':'badge-hard';
+  const opts=q.opts.map((o,oi)=>`<button class="option-btn" id="opt-${idx}-${oi}" onclick="answerMCQ(${idx},${oi})"><span class="opt-label">${String.fromCharCode(65+oi)}.</span><span>${o}</span></button>`).join('');
+  return `<div class="q-card" id="qcard-${idx}"><div class="q-top"><span class="q-num">${idx+1}.</span><span class="q-text">${q.q}</span><span class="difficulty-badge ${bc}">${q.diff}</span></div><div class="options">${opts}</div><div class="feedback" id="fb-${idx}"><span class="feedback-icon" id="fb-icon-${idx}"></span><span id="fb-text-${idx}"></span></div></div>`;
 }
 
-function renderCard() {
-  if (filteredCards.length === 0) return;
-  const card = filteredCards[currentCard];
-  document.getElementById('card-category').textContent = card.cat;
-  document.getElementById('card-question').textContent = card.q;
-  document.getElementById('card-answer').innerHTML = card.a.replace(/\n/g, '<br>').replace(/`([^`]+)`/g, '<code>$1</code>');
-  document.getElementById('flash-counter').textContent = `${currentCard+1} / ${filteredCards.length}`;
-  document.getElementById('flash-prog').style.width = ((currentCard+1)/filteredCards.length*100) + '%';
-  document.getElementById('prev-btn').disabled = currentCard === 0;
-  document.getElementById('next-btn').disabled = currentCard === filteredCards.length-1;
+function buildTF(q,idx){
+  const bc=q.diff==='easy'?'badge-easy':q.diff==='medium'?'badge-medium':'badge-hard';
+  return `<div class="q-card" id="qcard-${idx}"><div class="q-top"><span class="q-num">${idx+1}.</span><span class="q-text">${q.q}</span><span class="difficulty-badge ${bc}">${q.diff}</span></div><div class="tf-row"><button class="tf-btn" id="tf-${idx}-T" onclick="answerTF(${idx},true)">TRUE</button><button class="tf-btn" id="tf-${idx}-F" onclick="answerTF(${idx},false)">FALSE</button></div><div class="feedback" id="fb-${idx}"><span class="feedback-icon" id="fb-icon-${idx}"></span><span id="fb-text-${idx}"></span></div></div>`;
 }
 
-function flipCard() {
-  isFlipped = !isFlipped;
-  document.getElementById('flash-card').classList.toggle('flipped', isFlipped);
-  if (isFlipped) {
-    flippedCount++;
-    document.getElementById('flip-count').textContent = `Flipped ${flippedCount} time${flippedCount>1?'s':''}`;
+function answerMCQ(idx,chosen){
+  if(userAnswers[idx]!==undefined)return;
+  const q=mcqQuestions[idx];
+  userAnswers[idx]=chosen;
+  const isC=chosen===q.ans;
+  updateStats(isC);
+  for(let i=0;i<q.opts.length;i++){
+    const b=document.getElementById(`opt-${idx}-${i}`);
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===chosen&&!isC)b.classList.add('wrong');
+    else b.classList.add('dimmed');
   }
+  showFeedback(idx,isC,isC?q.correctFb:q.wrongFb);
+  const c=document.getElementById(`qcard-${idx}`);
+  c.classList.remove('unanswered-highlight');
+  c.classList.add(isC?'answered-correct':'answered-wrong');
 }
 
-function flashNav(dir) {
-  const newIdx = currentCard + dir;
-  if (newIdx < 0 || newIdx >= filteredCards.length) return;
-  currentCard = newIdx;
-  isFlipped = false;
+function answerTF(idx,chosen){
+  if(userAnswers[idx]!==undefined)return;
+  const q=tfQuestions[idx-20];
+  userAnswers[idx]=chosen;
+  const isC=chosen===q.ans;
+  updateStats(isC);
+  const tB=document.getElementById(`tf-${idx}-T`);
+  const fB=document.getElementById(`tf-${idx}-F`);
+  tB.disabled=true; fB.disabled=true;
+  if(q.ans===true){tB.classList.add('correct');(!isC?fB:fB).classList.add(!isC?'wrong':'dimmed');}
+  else{fB.classList.add('correct');(!isC?tB:tB).classList.add(!isC?'wrong':'dimmed');}
+  showFeedback(idx,isC,isC?q.correctFb:q.wrongFb);
+  const c=document.getElementById(`qcard-${idx}`);
+  c.classList.remove('unanswered-highlight');
+  c.classList.add(isC?'answered-correct':'answered-wrong');
+}
+
+function showFeedback(idx,isC,text){
+  const fb=document.getElementById(`fb-${idx}`);
+  fb.className=`feedback show ${isC?'correct-fb':'wrong-fb'}`;
+  document.getElementById(`fb-icon-${idx}`).textContent=isC?'✓ CORRECT':'✗ INCORRECT';
+  document.getElementById(`fb-text-${idx}`).textContent=text;
+}
+
+function updateStats(isC){
+  answered++;
+  if(isC)correct++; else wrong++;
+  document.getElementById('stat-answered').textContent=answered;
+  document.getElementById('stat-correct').textContent=correct;
+  document.getElementById('stat-wrong').textContent=wrong;
+  document.getElementById('exam-prog').style.width=(answered/30*100)+'%';
+}
+
+function submitExam(){
+  let first=null;
+  mcqQuestions.forEach((_,i)=>{if(userAnswers[i]===undefined){const c=document.getElementById(`qcard-${i}`);c.classList.add('unanswered-highlight');if(!first)first=c;}});
+  tfQuestions.forEach((_,i)=>{const idx=i+20;if(userAnswers[idx]===undefined){const c=document.getElementById(`qcard-${idx}`);c.classList.add('unanswered-highlight');if(!first)first=c;}});
+  if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+  const pct=Math.round(correct/30*100);
+  let grade,msg;
+  if(pct>=90){grade='A';msg='Outstanding. Excellent command of ViT concepts.';}
+  else if(pct>=80){grade='B';msg='Good performance. Review the attention mechanism steps.';}
+  else if(pct>=70){grade='C';msg='Satisfactory. Focus on Q/K/V roles and the [CLS] token.';}
+  else if(pct>=60){grade='D';msg='Passing. Re-study the slides carefully, especially Steps 2 and 3.';}
+  else{grade='F';msg='Needs improvement. Re-read all 12 slides thoroughly.';}
+  document.getElementById('score-grade').textContent=`${correct} / 30 — ${grade} (${pct}%)`;
+  document.getElementById('score-details').textContent=`Correct: ${correct}  |  Wrong: ${wrong}  |  Unanswered: ${30-answered}`;
+  document.getElementById('score-msg').textContent=msg;
+  const banner=document.getElementById('score-banner');
+  banner.classList.add('show');
+  banner.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ======= FLASHCARDS ENGINE =======
+const categories=[...new Set(flashcards.map(f=>f.cat.split(' — ')[0]+' — '+f.cat.split(' — ')[1]))];
+let activeFilter='All',filteredCards=[...flashcards],currentCard=0,isFlipped=false,flippedCount=0;
+
+function renderFilters(){
+  const bar=document.getElementById('filter-bar');
+  const slides=[...new Set(flashcards.map(f=>f.cat))];
+  let html=`<button class="filter-btn active" onclick="setFilter('All')">All (${flashcards.length})</button>`;
+  slides.forEach(s=>{
+    const count=flashcards.filter(f=>f.cat===s).length;
+    html+=`<button class="filter-btn" onclick="setFilter('${s}')">${s} (${count})</button>`;
+  });
+  bar.innerHTML=html;
+}
+
+function setFilter(cat){
+  activeFilter=cat;
+  filteredCards=cat==='All'?[...flashcards]:flashcards.filter(f=>f.cat===cat);
+  currentCard=0; isFlipped=false;
+  document.getElementById('flash-card').classList.remove('flipped');
+  document.getElementById('flip-count').textContent='Not flipped yet';
+  document.querySelectorAll('.filter-btn').forEach(b=>{b.classList.toggle('active',b.textContent.startsWith(cat.split(' (')[0]));});
+  if(cat==='All')document.querySelectorAll('.filter-btn')[0].classList.add('active');
+  renderCard();
+}
+
+function renderCard(){
+  if(!filteredCards.length)return;
+  const card=filteredCards[currentCard];
+  document.getElementById('card-category').textContent=card.cat;
+  document.getElementById('card-question').textContent=card.q;
+  document.getElementById('card-answer').innerHTML=card.a.replace(/\n/g,'<br>');
+  document.getElementById('flash-counter').textContent=`${currentCard+1} / ${filteredCards.length}`;
+  document.getElementById('flash-prog').style.width=((currentCard+1)/filteredCards.length*100)+'%';
+  document.getElementById('prev-btn').disabled=currentCard===0;
+  document.getElementById('next-btn').disabled=currentCard===filteredCards.length-1;
+}
+
+function flipCard(){
+  isFlipped=!isFlipped;
+  document.getElementById('flash-card').classList.toggle('flipped',isFlipped);
+  if(isFlipped){flippedCount++;document.getElementById('flip-count').textContent=`Flipped ${flippedCount} time${flippedCount>1?'s':''}`;}
+}
+
+function flashNav(dir){
+  const n=currentCard+dir;
+  if(n<0||n>=filteredCards.length)return;
+  currentCard=n; isFlipped=false;
   document.getElementById('flash-card').classList.remove('flipped');
   renderCard();
 }
 
-// Keyboard nav
-document.addEventListener('keydown', (e) => {
-  if (document.getElementById('flash-section').classList.contains('active')) {
-    if (e.key === 'ArrowRight') flashNav(1);
-    else if (e.key === 'ArrowLeft') flashNav(-1);
-    else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('flash-section').classList.contains('active')){
+    if(e.key==='ArrowRight')flashNav(1);
+    else if(e.key==='ArrowLeft')flashNav(-1);
+    else if(e.key===' '){e.preventDefault();flipCard();}
   }
 });
 
-// Tab switching
-function switchTab(tab) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(tab + '-section').classList.add('active');
-  event.target.classList.add('active');
+function switchTab(tab,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tab+'-section').classList.add('active');
+  el.classList.add('active');
 }
 
-// Init
 renderExam();
 renderFilters();
 renderCard();
